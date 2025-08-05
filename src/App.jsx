@@ -1,5 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
+import { caseStudies } from './assets/case-studies';
+// ...existing code...
 
 function App() {
   return (
@@ -8,16 +10,13 @@ function App() {
       <main>
         <section id="treatments">
           <h2>Treatments</h2>
-          <ul>
-            <li>Teeth Whitening</li>
-            <li>Emergency Dental Care</li>
-            <li>Dental Exam & X-Rays</li>
-            <li>Hygiene Services & Dental Cleaning</li>
-            <li>Dental Implants</li>
-            <li>Tooth Fillings</li>
-            <li>Invisalign®</li>
-            <li>Partial & Full Dentures</li>
-            <li>Root Canals</li>
+          <ul className="treatments-list">
+            {treatments.map((treatment, idx) => (
+              <li key={idx} className="treatment-item">
+                <img src={treatment.img} alt={treatment.name} width={40} height={40} style={{marginRight: '1rem', verticalAlign: 'middle'}} />
+                {treatment.name}
+              </li>
+            ))}
           </ul>
         </section>
         <section id="who-we-are">
@@ -50,6 +49,24 @@ function App() {
         <section id="case-studies">
           <h2>Case Studies</h2>
           <p>See before and after photos of our dental procedures and patient transformations.</p>
+          <div className="case-studies-grid">
+            {caseStudies.map((study, idx) => (
+              <div key={idx} className="case-study">
+                <h3>{study.title}</h3>
+                <div className="case-images">
+                  <div>
+                    <img src={study.before} alt={study.title + ' before'} width={200} />
+                    <p>Before</p>
+                  </div>
+                  <div>
+                    <img src={study.after} alt={study.title + ' after'} width={200} />
+                    <p>After</p>
+                  </div>
+                </div>
+                <p>{study.description}</p>
+              </div>
+            ))}
+          </div>
         </section>
         <section id="reviews">
           <h2>Patient Reviews</h2>

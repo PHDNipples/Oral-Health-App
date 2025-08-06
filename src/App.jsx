@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import { caseStudies } from './assets/case-studies';
-// ...existing code...
+import { treatments } from './assets/treatments';
 
 function App() {
   return (
@@ -72,13 +72,13 @@ function App() {
           <h2>Patient Reviews</h2>
           <blockquote>
             <p>"Had an appointment today to get a wire retainer put in and some fillings. The dentist did a great job - thank you!"</p>
-            <footer>- Emma S, Patient</footer>
+            <footer>- Grateful patient </footer>
           </blockquote>
         </section>
         <section id="contact">
           <h2>Contact Us</h2>
-          <p>Phone: 099507862</p>
-          <p>Location: Level 1, AON Centre, 29 Customs St W, Auckland 1010</p>
+          <p>Phone: generic phone number</p>
+          <p> Insert location here </p>
         </section>
       </main>
     </div>

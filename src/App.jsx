@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
-import { caseStudies } from './assets/case-studies';
-import { treatments } from './assets/treatments';
+import { caseStudies } from './data/case-studies';
+import { treatments } from './data/treatments';
 
 function App() {
   return (

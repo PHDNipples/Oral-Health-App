@@ -12,31 +12,37 @@ export default function AuthPage() {
   const onLoginSuccess = (userData, token) => {
     localStorage.setItem("firebase_token", token);
     localStorage.setItem("user", JSON.stringify(userData));
-    navigate("/home");
+    setMessage("Login successful!");
+    navigate("/");
+  };
+  
+  const onLoginError = (errorMessage) => {
+    setMessage(errorMessage);
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "auto", padding: 20 }}>
+    <div className="auth-container">
       {mode === "login" && (
         <LoginForm
-          onLogin={onLoginSuccess}
-          onSwitchToSignup={() => setMode("signup")}
-          onSwitchToForgot={() => setMode("forgot")}
+          onLoginSuccess={onLoginSuccess}
+          onLoginError={onLoginError}
+          onSwitchToSignup={() => { setMode("signup"); setMessage(""); }}
+          onSwitchToForgot={() => { setMode("forgot"); setMessage(""); }}
         />
       )}
       {mode === "signup" && (
         <SignupForm
-          onSignup={onLoginSuccess}
-          onSwitchToLogin={() => setMode("login")}
+          onSignupSuccess={onLoginSuccess}
+          onSwitchToLogin={() => { setMode("login"); setMessage(""); }}
         />
       )}
       {mode === "forgot" && (
         <ForgotPasswordForm
-          onSwitchToLogin={() => setMode("login")}
+          onSwitchToLogin={() => { setMode("login"); setMessage(""); }}
         />
       )}
 
-      {message && <p style={{ color: "red" }}>{message}</p>}
+      {message && <p className="message-text">{message}</p>}
     </div>
   );
 }

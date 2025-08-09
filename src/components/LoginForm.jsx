@@ -1,48 +1,52 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 
-
-export default function LoginForm() {
-  const navigate = useNavigate();
+export default function LoginForm({ onLoginSuccess, onLoginError, onSwitchToSignup, onSwitchToForgot }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const userData = await loginUser({ email, password });
       console.log("Login success:", userData);
-
-      // Redirect after successful login
-      navigate("/home");
+      onLoginSuccess(userData.user, userData.token);
     } catch (err) {
-      setError(err.message);
+      console.error("Login failed:", err.message);
+      onLoginError(err.message);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <form onSubmit={handleSubmit} className="auth-form">
+      <h2>Login</h2>
+      <div className="input-group">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="form-input"
+        />
+      </div>
+      <div className="input-group">
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="form-input"
+        />
+      </div>
+      <button type="submit" className="form-button">
+        Login
+      </button>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button type="submit">Login</button>
+      <div className="auth-links">
+        <p>Don't have an account? <a href="#" onClick={onSwitchToSignup}>Sign Up</a></p>
+        <p>Forgot password? <a href="#" onClick={onSwitchToForgot}>Reset Password</a></p>
+      </div>
     </form>
   );
 }

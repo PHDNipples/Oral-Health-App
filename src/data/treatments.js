@@ -9,13 +9,40 @@ import partialFullDentures from '../images/dentures.svg';
 import rootCanals from '../images/endodontiscs.svg';
 
 export const treatments = [
-  { name: 'Teeth Whitening', img: teethWhitening },
-  { name: 'Emergency Dental Care', img: emergencyDentalCare },
-  { name: 'Dental Exam & X-Rays', img: dentalExamXRays },
-  { name: 'Hygiene Services & Dental Cleaning', img: hygieneServicesDentalCleaning },
-  { name: 'Dental Implants', img: dentalImplants },
-  { name: 'Tooth Fillings', img: toothFillings },
-  { name: 'Invisalign®', img: invisalign },
-  { name: 'Partial & Full Dentures', img: partialFullDentures },
-  { name: 'Root Canals', img: rootCanals }
+  {
+    name: 'Teeth Whitening',
+    img: teethWhitening
+  },
+  {
+    name: 'Emergency Dental Care',
+    img: emergencyDentalCare
+  },
+  {
+    name: 'Dental Exam & X-Rays',
+    img: dentalExamXRays
+  },
+  {
+    name: 'Hygiene Services & Dental Cleaning',
+    img: hygieneServicesDentalCleaning
+  },
+  {
+    name: 'Dental Implants',
+    img: dentalImplants
+  },
+  {
+    name: 'Tooth Fillings',
+    img: toothFillings
+  },
+  {
+    name: 'Invisalign®',
+    img: invisalign
+  },
+  {
+    name: 'Partial & Full Dentures',
+    img: partialFullDentures
+  },
+  {
+    name: 'Root Canals',
+    img: rootCanals
+  }
 ];

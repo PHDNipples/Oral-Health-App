@@ -23,7 +23,6 @@ export default function ForgotPasswordForm({ onSwitchToLogin }) {
       setEmail("");
     } catch (err) {
       console.error("Password reset error:", err);
-      // Display a user-friendly error message
       setError("Failed to send reset email. Please check your email address.");
     }
   };

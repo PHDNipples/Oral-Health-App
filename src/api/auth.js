@@ -1,19 +1,47 @@
 import { auth } from "../../config/firebase.js";
+import { sendPasswordResetEmail } from "firebase/auth";
+import axios from 'axios';
 
-import { signInWithEmailAndPassword } from "firebase/auth";
-
+// Login user via backend API
 export const loginUser = async ({ email, password }) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    // A real token is now retrieved from Firebase
-    const token = await user.getIdToken();
-
-    return { user, token };
+    const response = await axios.post('/api/users/login', { email, password });
+    return response.data;
   } catch (error) {
-    console.error("Firebase login error:", error);
-    // Throw a new error with a user-friendly message
-    throw new Error("Login failed. Please check your email and password.");
+    throw new Error(error.response.data.error || "Login failed");
+  }
+};
+
+// Signup user via backend API
+export const signupUser = async (userData) => {
+  try {
+    const response = await axios.post('/api/users', userData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error || "Signup failed");
+  }
+};
+
+// Password reset email via Firebase
+export const forgotPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return { message: "Password reset link sent successfully." };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Update user profile via backend API
+export const updateUserProfile = async (userId, userData, token) => {
+  try {
+    const response = await axios.put(`/api/users/${userId}`, userData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error || "Failed to update profile");
   }
 };

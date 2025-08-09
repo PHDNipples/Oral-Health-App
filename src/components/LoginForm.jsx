@@ -7,7 +7,6 @@ export default function LoginForm({ onLoginSuccess, onLoginError, onSwitchToSign
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const userData = await loginUser({ email, password });
       console.log("Login success:", userData);

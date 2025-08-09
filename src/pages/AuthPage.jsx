@@ -10,7 +10,7 @@ export default function AuthPage() {
   const [mode, setMode] = useState("login"); // "login" | "signup" | "forgot"
 
   const onLoginSuccess = (userData, token) => {
-    localStorage.setItem("firebase_token", token);
+    localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
     setMessage("Login successful!");
     navigate("/");

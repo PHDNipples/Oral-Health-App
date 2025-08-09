@@ -1,7 +1,8 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
-import { auth, signOut } from "../../config/firebase";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { signOut } from "../../config/firebase";
+import { auth } from "../../config/firebase";
 
 
 const Navbar = () => {
@@ -10,8 +11,8 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      localStorage.removeItem("firebase_token");
+      await signOut(auth); // This is needed if you're using Firebase services
+      localStorage.removeItem("token");
       localStorage.removeItem("user");
       console.log("User logged out successfully");
       navigate("/auth");
@@ -22,25 +23,23 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="logo">Oral Health App</div>
+      <div className="logo">
+        <Link to="/">Oral Health App</Link>
+      </div>
       <ul className="nav-links">
-        <li><a href="#treatments">Treatments</a></li>
-        <li><a href="#who-we-are">Who We Are</a></li>
-        <li><a href="#offers">Offers & Promotions</a></li>
-        <li><a href="#team">Meet Our Team</a></li>
-        <li><a href="#payment">Payment Options</a></li>
-        <li><a href="#case-studies">Case Studies</a></li>
-        <li><a href="#reviews">Patient Reviews</a></li>
-        <li><a href="#contact">Contact</a></li>
+        {/* ... existing links ... */}
         {currentUser ? (
-          <li>
-            <button onClick={handleLogout} className="logout-btn">
-              Logout
-            </button>
-          </li>
+          <>
+            <li><Link to="/profile">Profile</Link></li>
+            <li>
+              <button onClick={handleLogout} className="logout-btn">
+                Logout
+              </button>
+            </li>
+          </>
         ) : (
           <li>
-            <a href="/auth">Login</a>
+            <Link to="/auth">Login</Link>
           </li>
         )}
       </ul>

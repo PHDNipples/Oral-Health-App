@@ -5,6 +5,7 @@ import AuthPage from './pages/AuthPage';
 import { useAuth } from './context/useAuth';
 import { caseStudies } from './data/case-studies';
 import { treatments } from './data/treatments';
+import ProfilePage from './pages/ProfilePage';
 
 const HomeContent = () => (
   <main>
@@ -87,7 +88,6 @@ const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
 
   if (loading) {
-    // You can return a loading spinner or message here if you want
     return <div>Loading...</div>;
   }
 
@@ -103,6 +103,7 @@ function App() {
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/" element={<ProtectedRoute><HomeContent /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       </Routes>
     </div>
   );

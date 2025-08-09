@@ -1,7 +1,7 @@
-import React, { createContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../config/firebase";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
@@ -11,17 +11,31 @@ export default function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setLoading(false);
-
-      if (user) {
-        // Redirect to the home page if a user is confirmed
-        navigate("/");
+    const checkAuthStatus = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.id;
+          
+          if (decodedToken.exp * 1000 < Date.now()) {
+            localStorage.removeItem("token");
+            setCurrentUser(null);
+          } else {
+            const user = JSON.parse(localStorage.getItem("user"));
+            setCurrentUser(user);
+          }
+        } catch (error) {
+          console.error("Invalid token:", error);
+          localStorage.removeItem("token");
+          setCurrentUser(null);
+        }
       }
-    });
-    return unsubscribe;
-  }, [navigate]);
+      setLoading(false);
+    };
+
+    checkAuthStatus();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ currentUser, loading }}>

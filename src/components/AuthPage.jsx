@@ -1,49 +1,59 @@
-// AuthPage.jsx
-import React, { useState } from 'react';
-import SignupForm from './SignupForm';
-import LoginForm from './LoginForm';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import SignupForm from '../components/SignupForm';
+import LoginForm from '../components/LoginForm';
+import axios from 'axios';
 
 export default function AuthPage() {
-  // State to manage which form is currently displayed
   const [isLogin, setIsLogin] = useState(true);
+  const { currentUser, setCurrentUser, setLoading } = useAuth();
+  const navigate = useNavigate();
 
-  // State to hold the current user's data after a successful login
-  const [currentUser, setCurrentUser] = useState(null);
-
-  // This function is passed to LoginForm. It will be called with the
-  // user data when login is successful.
-  const handleLogin = (userData) => {
-    setCurrentUser(userData);
-    console.log("User logged in:", userData);
-    // Here you would typically redirect the user or show a new part of the UI
+  const handleLogin = async (userCredential) => {
+    try {
+      setLoading(true);
+      const token = await userCredential.user.getIdToken();
+      
+      const response = await axios.post("/api/auth/login", {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      setCurrentUser(response.data.user);
+    } catch (err) {
+      console.error("Login to backend failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // If a user is logged in, show their details.
-  if (currentUser) {
-    return (
-      <div className="auth-container">
-        <h2>Welcome, {currentUser.name}!</h2>
-        <p>You are logged in with the email: {currentUser.email}</p>
-        <p>Your database ID is: {currentUser._id}</p>
-        {/* You could add a logout button here */}
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/');
+    }
+  }, [currentUser, navigate]);
 
-  // If no user is logged in, show the appropriate form
   return (
-    <div className="auth-container">
-      {isLogin ? (
-        <LoginForm
-          onLogin={handleLogin} // Passing the handleLogin function as a prop
-          onSwitchToSignup={() => setIsLogin(false)}
-        />
-      ) : (
-        <SignupForm
-          onSwitchToLogin={() => setIsLogin(true)}
-        />
-      )}
+    // This is the parent container. We use flexbox utilities to center the child element both horizontally and vertically.
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      {/* This is the card that contains the forms. It has a max width, rounded corners, a shadow, and padding. */}
+      <div className="w-full max-w-sm p-8 bg-white rounded-xl shadow-2xl">
+        {isLogin ? (
+          <LoginForm
+            onLogin={handleLogin}
+            onSwitchToSignup={() => setIsLogin(false)}
+          />
+        ) : (
+          <SignupForm
+            onSwitchToLogin={() => setIsLogin(true)}
+          />
+        )}
+      </div>
     </div>
   );
 }
-

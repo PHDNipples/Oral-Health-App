@@ -36,14 +36,13 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  // The value object contains the current user, loading state, and any
-  // functions needed for authentication (like signup, login, logout).
-  // We're just providing the state for now, as the components themselves will handle the functions.
+  // The value object now includes the state setter functions,
+  // making them available to components that use this context.
   const value = {
     currentUser,
+    setCurrentUser, // Exposing the setter function
     loading,
-    // Other functions like login, signup, logout can be added here if needed,
-    // but for now, we'll handle them directly in the components to simplify the flow.
+    setLoading, // Exposing the setter function
   };
 
   return (

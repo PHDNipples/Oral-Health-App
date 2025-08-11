@@ -1,27 +1,21 @@
-// AuthPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Using the useAuth hook
+import { useAuth } from '../context/AuthContext';
 import SignupForm from '../components/SignupForm';
 import LoginForm from '../components/LoginForm';
-import { auth } from '../../config/firebase'; // Assuming you have a firebase config file
-import { onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
-import '../App.css';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
-  const { currentUser, setCurrentUser, setLoading } = useAuth(); // Get state and setters from context
+  // Now we can correctly destructure and use setLoading and setCurrentUser
+  const { currentUser, setCurrentUser, setLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Function to handle a successful login
   const handleLogin = async (userCredential) => {
     try {
       setLoading(true);
-      // Get the Firebase ID token for the authenticated user
       const token = await userCredential.user.getIdToken();
       
-      // Send the token to your backend to get the user's data from MongoDB
       const response = await axios.post("/api/auth/login", {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
@@ -31,36 +25,34 @@ export default function AuthPage() {
         }
       });
       
-      // Set the user in the global authentication context
       setCurrentUser(response.data.user);
     } catch (err) {
       console.error("Login to backend failed:", err);
-      // Handle the error gracefully, maybe show a message
     } finally {
       setLoading(false);
     }
   };
 
-  // Use a useEffect hook to handle navigation
   useEffect(() => {
     if (currentUser) {
       navigate('/');
     }
-  }, [currentUser, navigate]); // The effect re-runs whenever currentUser or navigate changes
+  }, [currentUser, navigate]);
 
-  // If no user is logged in, show the appropriate form
   return (
-    <div className="auth-container">
-      {isLogin ? (
-        <LoginForm
-          onLogin={handleLogin} // Passing the corrected handleLogin function
-          onSwitchToSignup={() => setIsLogin(false)}
-        />
-      ) : (
-        <SignupForm
-          onSwitchToLogin={() => setIsLogin(true)}
-        />
-      )}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-2xl">
+        {isLogin ? (
+          <LoginForm
+            onLogin={handleLogin}
+            onSwitchToSignup={() => setIsLogin(false)}
+          />
+        ) : (
+          <SignupForm
+            onSwitchToLogin={() => setIsLogin(true)}
+          />
+        )}
+      </div>
     </div>
   );
 }

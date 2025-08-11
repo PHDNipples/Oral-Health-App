@@ -1,10 +1,26 @@
-import React from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+
+// Import your components and data
 import Navbar from './components/Navbar';
 import AuthPage from './pages/AuthPage';
+import ProfilePage from './pages/ProfilePage'; // Make sure this path is correct
 import { useAuth } from './context/useAuth';
 import { caseStudies } from './data/case-studies';
 import { treatments } from './data/treatments';
+
+// Global variables for Firebase config and auth token (provided by the environment)
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+// Safely initialize Firebase to prevent the "duplicate app" error
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 const HomeContent = () => (
   <main>
@@ -85,10 +101,25 @@ const HomeContent = () => (
 
 const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
+  
+  useEffect(() => {
+    const signIn = async () => {
+      if (loading || currentUser) return;
+      try {
+        if (initialAuthToken) {
+          await signInWithCustomToken(auth, initialAuthToken);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (error) {
+        console.error("Firebase Auth error:", error);
+      }
+    };
+    signIn();
+  }, [currentUser, loading]);
 
   if (loading) {
-    // You can return a loading spinner or message here if you want
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen bg-gray-100">Loading...</div>;
   }
 
   return currentUser ? children : <Navigate to="/auth" />;
@@ -96,6 +127,12 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+
+  const onNavigateToHome = () => {
+    navigate('/');
+  };
 
   return (
     <div className="App">
@@ -103,6 +140,19 @@ function App() {
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/" element={<ProtectedRoute><HomeContent /></ProtectedRoute>} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage
+                userId={currentUser?.uid || 'anonymous'}
+                db={db}
+                auth={auth}
+                onNavigateToHome={onNavigateToHome}
+              />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );

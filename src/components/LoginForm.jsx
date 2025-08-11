@@ -15,9 +15,14 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
     setMessage("");
 
     try {
+      // 1. Authenticate the user with Firebase
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // 2. Get the Firebase ID token for the authenticated user
       const token = await userCredential.user.getIdToken();
       
+      // 3. Send the token to your backend to get the user's data from MongoDB
+      // This step verifies the token and fetches the user document
       const response = await axios.post("/api/auth/login", {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
@@ -27,12 +32,14 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
         }
       });
 
+      // 4. If successful, pass the user data to the parent component
       onLogin(response.data.user);
       setMessage("Login successful!");
       console.log("Logged in user data:", response.data.user);
 
     } catch (err) {
       console.error("Login error:", err);
+      // Handle different types of errors from Firebase and the backend
       const errorMessage = err.response?.data?.error || err.message;
       setError(errorMessage || "Login failed. Please check your credentials.");
     }
@@ -55,42 +62,46 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-3xl font-bold text-center text-gray-900">Login</h2>
-      <div className="space-y-4">
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-          required 
-        />
-        <div className="flex justify-end text-sm">
-          <button type="button" onClick={handlePasswordReset} className="text-blue-600 hover:underline focus:outline-none">
-            Forgot Password?
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-xl">
+        <h2 className="text-3xl font-bold text-center text-blue-900">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+          {message && <p className="text-green-600 text-sm text-center">{message}</p>}
+          <div className="space-y-4 flex flex-col items-center">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-80 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-80 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              required
+            />
+            <div className="flex justify-end w-80 text-sm">
+              <button type="button" onClick={handlePasswordReset} className="text-blue-600 hover:underline focus:outline-none">
+                Forgot Password?
+              </button>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full px-4 py-2 text-white bg-blue-900 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          >
+            Login
           </button>
+        </form>
+        <div className="text-center text-sm">
+          <p>Don't have an account? <a href="#" onClick={onSwitchToSignup} className="text-blue-600 hover:underline">Sign Up</a></p>
         </div>
       </div>
-      <button 
-        type="submit" 
-        className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors transform hover:scale-105"
-      >
-        Login
-      </button>
-      {message && <p className="text-green-600 text-sm text-center">{message}</p>}
-      {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-      <div className="text-center text-sm">
-        <p>Don't have an account? <a href="#" onClick={onSwitchToSignup} className="text-blue-600 hover:underline">Sign Up</a></p>
-      </div>
-    </form>
+    </div>
   );
 }

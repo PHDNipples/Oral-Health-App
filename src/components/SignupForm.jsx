@@ -1,4 +1,3 @@
-// frontend/src/components/SignupForm.jsx
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../config/firebase";
@@ -47,18 +46,44 @@ export default function SignupForm({ onSwitchToLogin }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <h2>Sign Up</h2>
-      <div className="input-group">
-        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="form-input" required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="form-input" required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-input" required />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <h2 className="text-3xl font-bold text-center text-[#00539b] mb-6">Sign Up</h2>
+      <div className="space-y-4">
+        <input 
+          type="text" 
+          placeholder="Name" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)} 
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors" 
+          required 
+        />
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors" 
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors" 
+          required 
+        />
       </div>
-      <button type="submit" className="form-button">Sign Up</button>
-      {message && <p className="success-message">{message}</p>}
-      {error && <p className="error-message">{error}</p>}
-      <div className="auth-links">
-        <p>Already have an account? <a href="#" onClick={onSwitchToLogin}>Login</a></p>
+      <button 
+        type="submit" 
+        className="w-full px-4 py-2 text-white bg-[#00539b] rounded-md hover:bg-[#004a8c] focus:outline-none focus:ring-2 focus:ring-[#00539b] focus:ring-offset-2 transition-colors"
+      >
+        Sign Up
+      </button>
+      {message && <p className="text-green-600 text-sm text-center">{message}</p>}
+      {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+      <div className="text-center text-sm mt-6">
+        <p>Already have an account? <a href="#" onClick={onSwitchToLogin} className="text-[#00539b] hover:underline">Login</a></p>
       </div>
     </form>
   );

@@ -22,7 +22,6 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
       const token = await userCredential.user.getIdToken();
       
       // 3. Send the token to your backend to get the user's data from MongoDB
-      // This step verifies the token and fetches the user document
       const response = await axios.post("/api/auth/login", {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
@@ -62,52 +61,42 @@ export default function LoginForm({ onLogin, onSwitchToSignup }) {
   };
 
   return (
-    // Outer container for the full screen with a light gray background
-    <div className="flex items-center justify-center min-h-screen bg-[#f8f8f8]">
-      {/* Inner container for the login form, styled to match the provided CSS 'main' section */}
-      <div className="w-full max-w-md bg-white p-10 rounded-xl shadow-[0_2px_16px_rgba(0,83,155,0.08)]">
-        {/* Login form header, colored to match the theme blue */}
-        <h2 className="text-3xl font-bold text-center text-[#00539b] mb-6">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-          {message && <p className="text-green-600 text-sm text-center">{message}</p>}
-          <div className="space-y-4">
-            {/* Email input field, with full width inside the form container */}
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors"
-              required
-            />
-            {/* Password input field, with full width inside the form container */}
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors"
-              required
-            />
-            <div className="flex justify-end text-sm">
-              <button type="button" onClick={handlePasswordReset} className="text-[#00539b] hover:underline focus:outline-none">
-                Forgot Password?
-              </button>
-            </div>
-          </div>
-          {/* Submit button, colored to match the theme blue with a darker hover state */}
-          <button
-            type="submit"
-            className="w-full px-4 py-2 text-white bg-[#00539b] rounded-md hover:bg-[#004a8c] focus:outline-none focus:ring-2 focus:ring-[#00539b] focus:ring-offset-2 transition-colors"
-          >
-            Login
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <h2 className="text-3xl font-bold text-center text-[#00539b] mb-6">Login</h2>
+      <div className="space-y-4">
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors" 
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors" 
+          required 
+        />
+        <div className="flex justify-end text-sm">
+          <button type="button" onClick={handlePasswordReset} className="text-[#00539b] hover:underline focus:outline-none">
+            Forgot Password?
           </button>
-        </form>
-        <div className="text-center text-sm mt-6">
-          <p>Don't have an account? <a href="#" onClick={onSwitchToSignup} className="text-[#00539b] hover:underline">Sign Up</a></p>
         </div>
       </div>
-    </div>
+      <button 
+        type="submit" 
+        className="w-full px-4 py-2 text-white bg-[#00539b] rounded-md hover:bg-[#004a8c] focus:outline-none focus:ring-2 focus:ring-[#00539b] focus:ring-offset-2 transition-colors"
+      >
+        Login
+      </button>
+      {message && <p className="text-green-600 text-sm text-center">{message}</p>}
+      {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+      <div className="text-center text-sm mt-6">
+        <p>Don't have an account? <a href="#" onClick={onSwitchToSignup} className="text-[#00539b] hover:underline">Sign Up</a></p>
+      </div>
+    </form>
   );
 }

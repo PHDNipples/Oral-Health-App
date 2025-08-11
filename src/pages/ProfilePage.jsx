@@ -40,37 +40,35 @@ export default function ProfilePage() {
     }
   };
 
-  if (loading) return <div className="flex justify-center items-center h-screen text-lg">Loading profile...</div>;
+  if (loading) return <div>Loading profile...</div>;
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center items-center p-4">
-      <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">User Profile</h2>
+    <div className="flex items-center justify-center min-h-screen bg-[#f8f8f8] p-4">
+      <div className="w-full max-w-md p-10 space-y-6 bg-white rounded-xl shadow-[0_2px_16px_rgba(0,83,155,0.08)]">
+        <h2 className="text-3xl font-bold text-center text-[#00539b]">User Profile</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-gray-700 font-medium">Name:</label>
+          <div className="space-y-4">
+            <label className="block text-sm font-medium text-gray-700">Name:</label>
             <input
               type="text"
               name="name"
-              id="name"
               value={profile.name || ''}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00539b] transition-colors"
             />
           </div>
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-gray-700 font-medium">Email:</label>
+          <div className="space-y-4">
+            <label className="block text-sm font-medium text-gray-700">Email:</label>
             <input
               type="email"
-              id="email"
               value={profile.email}
               disabled
-              className="w-full px-4 py-2 bg-gray-200 border border-gray-300 rounded-md focus:outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-200 cursor-not-allowed focus:outline-none"
             />
           </div>
-          <button 
-            type="submit" 
-            className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors" 
+          <button
+            type="submit"
+            className="w-full px-4 py-2 text-white bg-[#00539b] rounded-md hover:bg-[#004a8c] focus:outline-none focus:ring-2 focus:ring-[#00539b] focus:ring-offset-2 transition-colors"
             disabled={loading}
           >
             {loading ? 'Saving...' : 'Save Changes'}

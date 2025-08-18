@@ -1,3 +1,14 @@
+/*
+  * This file contains all global styles for the app.
+  *
+  * New: A CSS custom property has been added for your brand color.
+  * We are using only plain CSS as requested.
+  */
+
+:root {
+  --color-primary: #54C45E;
+}
+
 /* Treatments List */
 .treatments-list {
   list-style: none;
@@ -128,43 +139,65 @@ footer {
 }
 
 /*
- * New styles for Login/Logout features
- * These styles are appended to your original code.
- */
+ * New styles for Login/Logout features
+ * These styles are appended to your original code.
+ */
+
 .auth-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
-  background-color: #f0f2f5;
+  padding: 2rem;
+  background-color: var(--color-primary); /* Use our custom property for consistency */
 }
 
-.auth-form {
-  background-color: white;
-  padding: 40px;
+.auth-logo {
+  width: 160px; /* Equivalent to Tailwind's w-40 */
+  height: auto;
+  margin-bottom: 3rem; /* Equivalent to sm:mb-12 */
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form-container {
   width: 100%;
-  max-width: 400px;
-  text-align: center;
+  max-width: 400px; /* Equivalent to max-w-sm */
+  padding: 2.5rem; /* Equivalent to p-6 sm:p-8 */
+  background-color: white;
+  border-radius: 16px; /* A bit more rounded */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .auth-form h2 {
-  margin-bottom: 24px;
+  margin-bottom: 2rem;
   color: #00539b;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .input-group {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px;
+  padding: 0.75rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
   box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-input:focus {
@@ -175,37 +208,48 @@ footer {
 
 .form-button {
   width: 100%;
-  padding: 12px;
+  padding: 0.75rem;
   border: none;
-  border-radius: 4px;
-  background-color: #00539b;
+  border-radius: 8px;
+  background-color: var(--color-primary);
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .form-button:hover {
-  background-color: #003e7a;
+  background-color: #3d8b43;
 }
 
-.error-message {
-  color: #dc3545;
-  margin-bottom: 16px;
+.auth-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
 }
 
-.logout-btn {
-  background-color: #e74c3c;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
+.auth-links p {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  color: #64748b;
+}
+
+.auth-links a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+.message-text {
+  margin-top: 1rem;
+  color: #3d8b43;
   font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.logout-btn:hover {
-  background-color: #c0392b;
-}

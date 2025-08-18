@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/pages/AuthPage.jsx
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
@@ -20,27 +21,39 @@ export default function AuthPage() {
     setMessage(errorMessage);
   };
 
+  useEffect(() => {
+    // Add the class to the body element when the component mounts
+    document.body.classList.add('app-bg');
+
+    // Remove the class from the body element when the component unmounts
+    return () => {
+      document.body.classList.remove('app-bg');
+    };
+  }, []);
+
   return (
     <div className="auth-container">
-      {mode === "login" && (
-        <LoginForm
-          onLoginSuccess={onLoginSuccess}
-          onLoginError={onLoginError}
-          onSwitchToSignup={() => { setMode("signup"); setMessage(""); }}
-          onSwitchToForgot={() => { setMode("forgot"); setMessage(""); }}
-        />
-      )}
-      {mode === "signup" && (
-        <SignupForm
-          onSignupSuccess={onLoginSuccess}
-          onSwitchToLogin={() => { setMode("login"); setMessage(""); }}
-        />
-      )}
-      {mode === "forgot" && (
-        <ForgotPasswordForm
-          onSwitchToLogin={() => { setMode("login"); setMessage(""); }}
-        />
-      )}
+      <div className="auth-form-container">
+        {mode === "login" && (
+          <LoginForm
+            onLoginSuccess={onLoginSuccess}
+            onLoginError={onLoginError}
+            onSwitchToSignup={() => { setMode("signup"); setMessage(""); }}
+            onSwitchToForgot={() => { setMode("forgot"); setMessage(""); }}
+          />
+        )}
+        {mode === "signup" && (
+          <SignupForm
+            onSignupSuccess={onLoginSuccess}
+            onSwitchToLogin={() => { setMode("login"); setMessage(""); }}
+          />
+        )}
+        {mode === "forgot" && (
+          <ForgotPasswordForm
+            onSwitchToLogin={() => { setMode("login"); setMessage(""); }}
+          />
+        )}
+      </div>
 
       {message && <p className="message-text">{message}</p>}
     </div>

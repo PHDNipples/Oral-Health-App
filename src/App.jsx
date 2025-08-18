@@ -1,14 +1,11 @@
 import React from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-
-// Import your components and data
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
+import SecuritySettings from './pages/SecuritySettings'; 
 import { caseStudies } from './data/case-studies';
 import { treatments } from './data/treatments';
-
-// Correctly import the AuthProvider and useAuth hook as named exports
 import { AuthProvider, useAuth } from './context/useAuth';
 
 const HomeContent = () => (
@@ -91,14 +88,10 @@ const HomeContent = () => (
 const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
   
-  // 1. If we are still loading the auth state, show a loading spinner.
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen bg-gray-100">Loading...</div>;
   }
 
-  // 2. Once loading is false, check if a user exists.
-  // If no user, navigate to the auth page.
-  // If a user exists, render the protected children.
   return currentUser ? children : <Navigate to="/auth" />;
 };
 
@@ -106,17 +99,26 @@ function App() {
   const location = useLocation();
 
   return (
-    <AuthProvider>
-      <div className="App">
-        {location.pathname !== '/auth' && <Navbar />}
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/" element={<HomeContent />} />
-          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-        </Routes>
-      </div>
-    </AuthProvider>
+    <div className="App">
+      {location.pathname !== '/auth' && <Navbar />}
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/" element={<HomeContent />} />
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/security" element={<ProtectedRoute><SecuritySettings /></ProtectedRoute>} />
+      </Routes>
+    </div>
   );
 }
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </BrowserRouter>
+  );
+};
+
+export default AppWrapper;

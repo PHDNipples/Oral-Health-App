@@ -1,3 +1,4 @@
+// src/components/LoginForm.jsx
 import { useState } from "react";
 import { loginUser } from "../api/auth";
 
@@ -39,7 +40,7 @@ export default function LoginForm({ onLoginSuccess, onLoginError, onSwitchToSign
           className="form-input"
         />
       </div>
-      <button type="submit" className="form-button">
+      <button type="submit" className="white-button">
         Login
       </button>
 

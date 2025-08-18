@@ -1,36 +1,29 @@
+// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/useAuth';
-import { User, Mail, Smartphone } from 'lucide-react';
+import { User, Mail, Smartphone, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
-  // Use the custom useAuth hook to get the current user and authentication loading state.
   const { currentUser, loading: authLoading } = useAuth();
-  
-  // State to hold the user's profile data fetched from our backend API.
   const [userData, setUserData] = useState(null);
-  
-  // State to track the loading status of the API call.
   const [apiLoading, setApiLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Guard clause: Do not proceed if authentication is still loading or if there's no user.
     if (authLoading || !currentUser) {
       setUserData(null);
       setApiLoading(false);
       return;
     }
 
-    // Define an async function to fetch data from our backend.
     const fetchUserProfile = async () => {
       setApiLoading(true);
       try {
-        // We'll make a GET request to a new backend endpoint.
         const response = await fetch(`/api/users/${currentUser.uid}`);
-        
         if (!response.ok) {
           throw new Error('User not found or network error.');
         }
-
         const data = await response.json();
         setUserData(data);
       } catch (error) {
@@ -41,12 +34,9 @@ const ProfilePage = () => {
       }
     };
 
-    // Call the fetch function when the component mounts or when the user changes.
     fetchUserProfile();
-
   }, [currentUser, authLoading]); 
 
-  // Display a loading message while we wait for auth and the API call to complete.
   if (authLoading || apiLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -55,7 +45,6 @@ const ProfilePage = () => {
     );
   }
 
-  // Display a message if there is no current user.
   if (!currentUser) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -64,7 +53,6 @@ const ProfilePage = () => {
     );
   }
 
-  // Use a conditional render for the main content based on whether userData exists
   const ProfileContent = () => (
     <div className="min-h-screen p-8 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
       <main className="max-w-4xl mx-auto space-y-8">
@@ -87,6 +75,16 @@ const ProfilePage = () => {
               <Smartphone className="h-5 w-5 text-gray-500 dark:text-gray-400 mr-2" />
               <p className="text-gray-700 dark:text-gray-300"><strong>Name:</strong> {userData.name || 'Not provided'}</p>
             </div>
+          </div>
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={() => navigate('/security')}
+              className="flex items-center px-4 py-2 text-sm font-semibold rounded-lg shadow-md transition-colors
+                         bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Security Settings
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </button>
           </div>
         </section>
         

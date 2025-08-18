@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from "../../config/firebase";
 import { useAuth } from '../context/useAuth';
+import AtaataLogo from '../../src/'
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,15 +24,13 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="logo">Oral Health App</div>
+      {/* Use the imported SVG in the src attribute */}
+      <img src={AtaataLogo} alt="Ataata Logo" className="logo" />
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
         {currentUser && (
           <li>
-            {/* THIS IS THE FIX */}
-            {/* We're now using a standard <a> tag with an href. */}
-            {/* This will force a full page reload and send a request to your backend. */}
-            <a href="/profile">Profile</a>
+            <Link to="/profile">Profile</Link>
           </li>
         )}
         {currentUser ? (

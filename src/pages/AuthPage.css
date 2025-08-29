@@ -1,0 +1,105 @@
+/* src/pages/AuthPage.css */
+
+/*
+ * This container is a Flexbox column to center its content.
+ */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/*
+ * The form container is the reference point for the logo.
+ * The padding-top is now adjusted to accommodate the new, larger logo size.
+ */
+.auth-form-container {
+    background: #fff;
+    padding: 150px 2rem 2rem 2rem; /* Adjusted padding-top for the 450px logo */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    border: 3px solid #FFD700;
+}
+
+/*
+ * The logo is absolutely positioned relative to the form container.
+ * `top: 0` places the top of the logo at the top edge of the form.
+ * `left: 50%` centers it horizontally.
+ * `transform: translate(-50%, -50%)` centers the logo's center on the form's top edge.
+ */
+.logo-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+/*
+ * The logo's size has been increased to 450px to reduce negative space.
+ * The black border has been re-added for visualization.
+ */
+.auth-logo {
+    width: 450px;
+    height: 100%;
+}
+
+/* The app-name styles have been completely removed. */
+
+/* Existing styles */
+.app-bg {
+    background-color: #388E3C;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-form h2 {
+    margin-bottom: 1rem;
+}
+
+.auth-form .input-group {
+    margin-bottom: 1rem;
+}
+
+.auth-form .form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.auth-form .white-button {
+    background-color: #388E3C;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.auth-form .auth-links {
+    margin-top: 1rem;
+}
+
+.auth-form .auth-links a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.auth-form .auth-links a:hover {
+    text-decoration: underline;
+}
+
+.message-text {
+    text-align: center;
+    margin-top: 1rem;
+    color: #333;
+}

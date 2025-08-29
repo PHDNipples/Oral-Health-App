@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/useAuth';
 import { User, Mail, Smartphone, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import './ProfilePage.css'; 
 
 const ProfilePage = () => {
   const { currentUser, loading: authLoading } = useAuth();

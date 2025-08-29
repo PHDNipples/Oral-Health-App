@@ -1,6 +1,7 @@
 // src/components/LoginForm.jsx
 import { useState } from "react";
 import { loginUser } from "../api/auth";
+import AtaataLogo from "../Logo/Ataata.svg";
 
 export default function LoginForm({ onLoginSuccess, onLoginError, onSwitchToSignup, onSwitchToForgot }) {
   const [email, setEmail] = useState("");
@@ -21,7 +22,11 @@ export default function LoginForm({ onLoginSuccess, onLoginError, onSwitchToSign
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">
-      <h2>Login</h2>
+      {/* Replace the h2 heading with the logo image */}
+      <div className="logo-container">
+        <img src={AtaataLogo} alt="Ataata Logo" className="auth-logo" />
+      </div>
+
       <div className="input-group">
         <input
           type="email"
@@ -45,8 +50,18 @@ export default function LoginForm({ onLoginSuccess, onLoginError, onSwitchToSign
       </button>
 
       <div className="auth-links">
-        <p>Don't have an account? <a href="#" onClick={onSwitchToSignup}>Sign Up</a></p>
-        <p>Forgot password? <a href="#" onClick={onSwitchToForgot}>Reset Password</a></p>
+        <p>
+          Don't have an account?{" "}
+          <a href="#" onClick={onSwitchToSignup}>
+            Sign Up
+          </a>
+        </p>
+        <p>
+          Forgot password?{" "}
+          <a href="#" onClick={onSwitchToForgot}>
+            Reset Password
+          </a>
+        </p>
       </div>
     </form>
   );

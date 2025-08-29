@@ -1,6 +1,8 @@
 // home.jsx
 import React from 'react';
 import { Mail } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
+import './Home.css';
 
 // The Home component displays the user's ID and a button to go to the profile page.
 const Home = ({ userId, onNavigateToProfile }) => {

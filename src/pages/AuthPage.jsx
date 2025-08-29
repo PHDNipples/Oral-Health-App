@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
 import ForgotPasswordForm from "../components/ForgotPasswordForm";
+import "./AuthPage.css";
 
 export default function AuthPage() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-  const [mode, setMode] = useState("login"); // "login" | "signup" | "forgot"
+  const [mode, setMode] = useState("login");
 
   const onLoginSuccess = (userData, token) => {
     localStorage.setItem("firebase_token", token);
@@ -16,7 +17,7 @@ export default function AuthPage() {
     setMessage("Login successful!");
     navigate("/");
   };
-  
+
   const onLoginError = (errorMessage) => {
     setMessage(errorMessage);
   };
@@ -34,6 +35,11 @@ export default function AuthPage() {
   return (
     <div className="auth-container">
       <div className="auth-form-container">
+        {/*
+         * This element will display the website name.
+         * The CSS you were given will position and style it correctly.
+         */}
+        <div className="app-name"></div>
         {mode === "login" && (
           <LoginForm
             onLoginSuccess={onLoginSuccess}

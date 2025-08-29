@@ -7,6 +7,7 @@ import SecuritySettings from './pages/SecuritySettings';
 import { caseStudies } from './data/case-studies';
 import { treatments } from './data/treatments';
 import { AuthProvider, useAuth } from './context/useAuth';
+import HomePage from './pages/Home';
 
 const HomeContent = () => (
   <main>

@@ -1,0 +1,54 @@
+/*
+ * This file contains all global styles for the app.
+ */
+
+:root {
+  --color-primary: #54C45E;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f8f8f8;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  max-width: 1000px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(0,83,155,0.08);
+}
+
+section {
+  margin-bottom: 2.5rem;
+}
+
+h2 {
+  color: #00539b;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+ul {
+  padding-left: 1.5rem;
+}
+
+blockquote {
+  background: #e6f2ff;
+  border-left: 4px solid #00539b;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+footer {
+  background: #00539b;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  border-radius: 0 0 10px 10px;
+}

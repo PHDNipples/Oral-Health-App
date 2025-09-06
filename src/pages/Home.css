@@ -1,0 +1,53 @@
+/* src/pages/Home.css */
+
+/*
+  * This file contains styles that were previously in the main App.css
+  * but belong specifically to the Home page or its child components.
+  */
+
+.treatments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.treatment-item {
+  display: flex;
+  align-items: center;
+  background: #f4f8fc;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,83,155,0.05);
+  min-width: 220px;
+}
+
+.case-studies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.case-study {
+  background: #f4f8fc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,83,155,0.05);
+}
+
+.case-images {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.case-images img {
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,83,155,0.10);
+  background: #fff;
+}

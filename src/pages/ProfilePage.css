@@ -1,0 +1,81 @@
+/* src/pages/ProfilePage.css */
+
+.profile-page-container {
+  /* Main container for the profile page */
+  padding: 2rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  /* Header for the user profile section */
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1.5rem;
+}
+
+.profile-avatar {
+  /* Styles for the user's profile picture */
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #bdc3c7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 2rem;
+  margin-right: 1.5rem;
+}
+
+.profile-info {
+  /* Container for the user's name and email */
+  font-family: 'Inter', sans-serif;
+}
+
+.profile-info h2 {
+  font-size: 1.75rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.profile-info p {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin: 0.25rem 0 0;
+}
+
+.profile-section {
+  /* Styles for individual sections within the profile */
+  margin-bottom: 1.5rem;
+}
+
+.profile-section-title {
+  font-size: 1.25rem;
+  color: #34495e;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.profile-button {
+  /* Styles for a button on the profile page */
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #e74c3c;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+  background-color: #c0392b;
+}
+

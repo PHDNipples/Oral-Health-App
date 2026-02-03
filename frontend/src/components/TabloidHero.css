@@ -1,0 +1,69 @@
+/* =========================
+   TABLOID HERO (ATA ATA)
+   ========================= */
+
+/* Control overall position of the ATA block */
+.tabloid-hero {
+  position: absolute;
+  top: 180px; /* ← tweak this to move ATA up/down above navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+/* Container for each ATA word */
+.tabloid-word {
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* Horizontal placement of left/right ATA words */
+.tabloid-word.left {
+  left: calc(50% - 140px); /* ← tweak horizontal offset */
+  transform: translateX(-100%);
+}
+
+.tabloid-word.right {
+  left: calc(50% + 140px); /* ← tweak horizontal offset */
+}
+
+/* Individual letters */
+.tabloid-letter {
+  font-size: 100px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -8px;
+  display: inline-block;
+  transform-origin: bottom center;
+  transition: transform 0.1s linear, opacity 0.1s linear;
+  line-height: 1;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Larger screens */
+@media (min-width: 1200px) {
+  .tabloid-letter {
+    font-size: 120px;
+  }
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+  .tabloid-letter {
+    font-size: 72px;
+    letter-spacing: -4px;
+  }
+
+  .tabloid-word.left {
+    left: calc(50% - 100px);
+  }
+
+  .tabloid-word.right {
+    left: calc(50% + 100px);
+  }
+}

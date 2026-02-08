@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { TiArrowForward } from "react-icons/ti";
 import AppBanner from "../components/Banner.jsx";
+import TabloidHero from "../components/TabloidHero/TabloidHero.jsx";
 import "./Home.css";
 
 /* Social posts */
@@ -103,6 +104,9 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Tabloid Hero with curved ATA letters */}
+      <TabloidHero />
+
       {/* Flipbooks */}
       <section className="broche-section">
         <div className="broche-container" ref={containerRef}>
@@ -181,7 +185,8 @@ const Home = () => {
           </div>
         </div>
       </section>
-                  {/* App Banner */}
+
+      {/* App Banner */}
       <AppBanner />
       
     </main>

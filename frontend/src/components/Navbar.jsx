@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import AtaataLogoImg from '../Logo/Ataata.svg';
+import CurveMask from './CurveMask/CurveMask';
+import TabloidHero from './TabloidHero/TabloidHero';
 import '../index.css';
 
 const routeColors = {
@@ -175,88 +177,75 @@ const Navbar = () => {
         .dropdown.visible { display: block; }
         .dropdown-item { padding: 0.5rem 1rem; cursor: pointer; }
         .dropdown-item:hover { background-color: #f0f0f0; }
-
-        /* ===== Tabloid text ATA ATA */
-        .tabloid-text {
-          position: absolute;
-          top: 60px;
-          left: 50%;
-          transform: translateX(-50%);
-          display: flex;
-          justify-content: center;
-          z-index: 1001;
-          pointer-events: none;
-        }
-        .tabloid-letter {
-          font-size: 100px;
-          font-weight: 900;
-          color: white;
-          letter-spacing: -8px;
-          transform-origin: bottom center;
-          transition: transform 0.1s linear, opacity 0.1s linear;
-          display: inline-block;
-        }
       `}</style>
 
       <div className="navbar-wrapper">
-        {/* Tabloid ATA ATA */}
-        <div className="tabloid-text">
-          {'ATA ATA'.split('').map((letter, i) => (
-            <span
-              key={i}
-              className="tabloid-letter"
-              style={{
-                transform: `scaleY(${1 - (isScrolled ? 0.8 : 0)})`,
-                opacity: `${1 - (isScrolled ? 1 : 0)}`
-              }}
+      {/* Ribbon background / decorative curve */}
+      <div className="ribbon-container">
+        <svg className="svg-arch" viewBox="0 0 1000 650" preserveAspectRatio="none">
+          <path
+            fill={navbarColor}
+            d={
+              isScrolled
+                ? 'M 0 0 Q 500 0 1000 0 L 1000 350 Q 500 300 0 350 Z'
+                : 'M 0 400 Q 500 0 1100 450 L 1100 700 Q 500 200 0 650 Z'
+            }
+          />
+        </svg>
+      </div>
+          
+      {/* CurveMask attached to navbar to mask TabloidHero */}
+      <CurveMask navbarColor={navbarColor} isScrolled={isScrolled} />
+      {/* Green container (optional background or padding) */}
+      <div className="green-container">
+        <svg className="svg-arch" viewBox="0 0 1000 250" preserveAspectRatio="none">
+          <path fill="transparent" d="M0,250 Q500,30 1000,250 L1000,250 L0,250 Z" />
+        </svg>
+      </div>
+          
+      {/* Navigation links */}
+      <div className="nav-links">
+        {leftLinks.filter(link => !link.auth || currentUser).map((link, i) => (
+          <div key={i} style={{ position: 'relative' }} ref={el => (navRefs.current[i] = el)}>
+            <a
+              onClick={() => link.isDropdown ? setLanguageDropdown(!languageDropdown) : handleLinkClick(link)}
+              className="nav-link"
             >
-              {letter}
-            </span>
-          ))}
-        </div>
-
-        <div className="ribbon-container">
-          <svg className="svg-arch" viewBox="0 0 1000 650" preserveAspectRatio="none">
-            <path fill={navbarColor} d={isScrolled ? 'M 0 0 Q 500 0 1000 0 L 1000 350 Q 500 300 0 350 Z' : 'M 0 400 Q 500 0 1100 450 L 1100 700 Q 500 200 0 650 Z'} />
-          </svg>
-        </div>
-
-        <div className="green-container">
-          <svg className="svg-arch" viewBox="0 0 1000 250" preserveAspectRatio="none">
-            <path fill="transparent" d="M0,250 Q500,30 1000,250 L1000,250 L0,250 Z" />
-          </svg>
-        </div>
-
-        <div className="nav-links">
-          {leftLinks.filter(link => !link.auth || currentUser).map((link, i) => (
-            <div key={i} style={{ position: 'relative' }} ref={el => (navRefs.current[i] = el)}>
-              <a onClick={() => link.isDropdown ? setLanguageDropdown(!languageDropdown) : handleLinkClick(link)} className="nav-link">
-                {link.name}
-              </a>
-              {link.isDropdown && (
-                <div className={`dropdown ${languageDropdown ? 'visible' : ''}`}>
-                  {languages.map((lang, idx) => (
-                    <div key={idx} className="dropdown-item" onClick={() => handleLanguageSelect(lang)}>
-                      {lang}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          {rightLinks.map((link, i) => (
-            <a key={i} ref={el => (navRefs.current[leftLinks.length + i] = el)} onClick={() => handleLinkClick(link)} className="nav-link">
               {link.name}
             </a>
-          ))}
-        </div>
-
-        <div className="logo-container" onClick={() => navigate('/')}>
-          <div className="inner-circle">
-            <img src={AtaataLogoImg} alt="Ataata Logo" className="logo-svg" />
+            {link.isDropdown && (
+              <div className={`dropdown ${languageDropdown ? 'visible' : ''}`}>
+                {languages.map((lang, idx) => (
+                  <div key={idx} className="dropdown-item" onClick={() => handleLanguageSelect(lang)}>
+                    {lang}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+        ))}
+        {rightLinks.map((link, i) => (
+          <a
+            key={i}
+            ref={el => (navRefs.current[leftLinks.length + i] = el)}
+            onClick={() => handleLinkClick(link)}
+            className="nav-link"
+          >
+            {link.name}
+          </a>
+        ))}
+      </div>
+      
+      {/* Logo */}
+      <div className="logo-container" onClick={() => navigate('/')}>
+        <div className="inner-circle">
+          <img src={AtaataLogoImg} alt="Ataata Logo" className="logo-svg" />
         </div>
       </div>
+    </div>
+
+
+      <div className="spacer"></div>
     </>
   );
 };

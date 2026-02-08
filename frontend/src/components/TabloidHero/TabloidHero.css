@@ -1,0 +1,30 @@
+.tabloid-hero {
+  position: absolute;
+  inset: 0;
+
+  /* Center reference point, relative to SVG width */
+  --ata-center-x: 50%;
+  --ata-offset-x: 6rem; /* distance from logo center, adjustable */
+  --ata-offset-y: -1rem; /* vertical shift */
+}
+
+.ata {
+  position: absolute;
+  top: var(--ata-offset-y);
+  font-size: clamp(4rem, 10vw, 10rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: black;
+  white-space: nowrap;
+}
+
+.ata-left {
+  left: calc(var(--ata-center-x) - var(--ata-offset-x));
+  transform: translateX(-100%); /* move left by width of element */
+}
+
+.ata-right {
+  left: calc(var(--ata-center-x) + var(--ata-offset-x));
+  transform: translateX(0); /* no extra offset */
+}

@@ -1,6 +1,8 @@
+// src/components/TabloidHero/TabloidHero.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import './TabloidHero.css';
 import { NAVBAR_CURVE, getCurveY } from '../navbarCurve';
+import CurveMask from '../CurveMask/CurveMask'; // import the bar
 
 const TabloidHero = () => {
   const heroRef = useRef(null);
@@ -14,48 +16,40 @@ const TabloidHero = () => {
 
   const OFFSET_X = 96;
   const SAFE_MARGIN = 16;
-  const RAISE_OFFSET = 0;   
-  const TOP_PADDING = -100; // global vertical offset for all letters
+  const RAISE_OFFSET = 0;
+  const TOP_PADDING = -100;
 
-  // ===== MANUAL ADJUSTMENTS PER LETTER =====
-  // Vertical scale (height)
-  const leftScalesY = [1.2, 1, 1];  
+  // manual adjustments per letter
+  const leftScalesY = [1.2, 1, 1];
   const rightScalesY = [1, 1, 1.3];
-
-  // Horizontal scale (width)
-  const leftScalesX = [1.8, 1.8, 1.8];  
+  const leftScalesX = [1.8, 1.8, 1.8];
   const rightScalesX = [1.8, 1.8, 1.8];
-
-  // Manual X offsets (adjust left/right along horizontal axis)
-  const leftOffsetsX = [-320, -200, -70];  
+  const leftOffsetsX = [-320, -200, -70];
   const rightOffsetsX = [70, 220, 350];
+  const leftOffsetsY = [0, 18, 30];
+  const rightOffsetsY = [30, 18, -5];
 
-  // Manual Y offsets (fine tune vertical position)
-  const leftOffsetsY = [0, 15, 30];  
-  const rightOffsetsY = [30, 15, 0];
-
-  // Calculate individual letter Y offsets along navbar curve
   const updateLetterOffsets = () => {
     if (!heroRef.current) return;
     const heroWidth = heroRef.current.offsetWidth;
 
     const screenToSvgX = (x) => (x / heroWidth) * NAVBAR_CURVE.width;
 
-    // LEFT container
+    // LEFT letters
     const leftContainer = leftRef.current;
     const leftWidth = leftContainer.offsetWidth;
     const left = ATA_LEFT.map((_, i) => {
-      const x = (i + 0.5) * (leftWidth / ATA_LEFT.length); // center of letter
+      const x = (i + 0.5) * (leftWidth / ATA_LEFT.length);
       const svgX = screenToSvgX(x);
       return getCurveY(svgX, NAVBAR_CURVE) - RAISE_OFFSET + TOP_PADDING + leftOffsetsY[i];
     });
 
-    // RIGHT container
+    // RIGHT letters
     const rightContainer = rightRef.current;
     const rightWidth = rightContainer.offsetWidth;
     const right = ATA_RIGHT.map((_, i) => {
       const x = (i + 0.5) * (rightWidth / ATA_RIGHT.length);
-      const svgX = screenToSvgX(heroWidth - rightWidth + x); // right side
+      const svgX = screenToSvgX(heroWidth - rightWidth + x);
       return getCurveY(svgX, NAVBAR_CURVE) - RAISE_OFFSET + TOP_PADDING + rightOffsetsY[i];
     });
 
@@ -109,6 +103,14 @@ const TabloidHero = () => {
           </span>
         ))}
       </div>
+
+      {/* CURVE MASK BAR (red) */}
+      <CurveMask
+        top="90px"       // manually place above navbar (adjust as needed)
+        thickness={40}   // adjustable thickness
+        color="red"      // clearly visible
+        curvature={0.5}  // adjustable curvature
+      />
     </div>
   );
 };

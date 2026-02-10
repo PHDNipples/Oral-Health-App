@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import AtaataLogoImg from '../Logo/Ataata.svg';
 import TabloidHero from './TabloidHero/TabloidHero';
+import CurveMask from './CurveMask/CurveMask';
 import '../index.css';
 
 const routeColors = {
@@ -206,69 +207,87 @@ const Navbar = () => {
       `}</style>
 
       <div className="navbar-wrapper">
-        <div className={`ribbon-container ${isScrolled ? 'scrolled' : ''}`}>
-          <svg className="svg-arch" viewBox="0 0 1000 650" preserveAspectRatio="none">
-            <path
-              fill={navbarColor}
-              d={
-                isScrolled
-                  ? 'M 0 0 Q 500 0 1000 0 L 1000 350 Q 500 300 0 350 Z'
-                  : 'M 0 400 Q 500 0 1100 450 L 1100 700 Q 500 200 0 650 Z'
-              }
-            />
-          </svg>
-        </div>
+  <div className={`ribbon-container ${isScrolled ? 'scrolled' : ''}`}>
+    <svg className="svg-arch" viewBox="0 0 1000 650" preserveAspectRatio="none">
+      <path
+        fill={navbarColor}
+        d={
+          isScrolled
+            ? 'M 0 0 Q 500 0 1000 0 L 1000 350 Q 500 300 0 350 Z'
+            : 'M 0 400 Q 500 0 1100 450 L 1100 700 Q 500 200 0 650 Z'
+        }
+      />
+    </svg>
+  </div>
 
-        <TabloidHero />
+  {/* CURVE MASK BAR — correct stacking context */}
+  <CurveMask
+    thickness={40}
+    color="red"
+    verticalOffset={0}
+  />
 
-        <div className={`green-container ${isScrolled ? 'scrolled' : ''}`}>
-          <svg className="svg-arch" viewBox="0 0 1000 250" preserveAspectRatio="none">
-            <path fill="transparent" d="M0,250 Q500,30 1000,250 L1000,250 L0,250 Z" />
-          </svg>
-        </div>
+  <TabloidHero />
 
-        <div className="nav-links">
-          {leftLinks.filter(link => !link.auth || currentUser).map((link, i) => (
-            <div key={i} style={{ position: 'relative' }} ref={el => (navRefs.current[i] = el)}>
-              <a
-                onClick={() => link.isDropdown ? setLanguageDropdown(!languageDropdown) : handleLinkClick(link)}
-                className="nav-link"
+  <div className={`green-container ${isScrolled ? 'scrolled' : ''}`}>
+    <svg className="svg-arch" viewBox="0 0 1000 250" preserveAspectRatio="none">
+      <path fill="transparent" d="M0,250 Q500,30 1000,250 L1000,250 L0,250 Z" />
+    </svg>
+  </div>
+
+  <div className="nav-links">
+    {leftLinks.filter(link => !link.auth || currentUser).map((link, i) => (
+      <div key={i} style={{ position: 'relative' }} ref={el => (navRefs.current[i] = el)}>
+        <a
+          onClick={() =>
+            link.isDropdown
+              ? setLanguageDropdown(!languageDropdown)
+              : handleLinkClick(link)
+          }
+          className="nav-link"
+        >
+          {link.name}
+        </a>
+        {link.isDropdown && (
+          <div className={`dropdown ${languageDropdown ? 'visible' : ''}`}>
+            {languages.map((lang, idx) => (
+              <div
+                key={idx}
+                className="dropdown-item"
+                onClick={() => handleLanguageSelect(lang)}
               >
-                {link.name}
-              </a>
-              {link.isDropdown && (
-                <div className={`dropdown ${languageDropdown ? 'visible' : ''}`}>
-                  {languages.map((lang, idx) => (
-                    <div key={idx} className="dropdown-item" onClick={() => handleLanguageSelect(lang)}>
-                      {lang}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          {rightLinks.map((link, i) => (
-            <a
-              key={i}
-              ref={el => (navRefs.current[leftLinks.length + i] = el)}
-              onClick={() => handleLinkClick(link)}
-              className="nav-link"
-            >
-              {link.name}
-            </a>
-          ))}
-        </div>
+                {lang}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
 
-        <div
-  className="logo-container"
-  onClick={() => navigate('/')}
-  style={{
-    top: isScrolled
-      ? '30px' // original top when scrolled
-      : `${30 + NAVBAR_VERTICAL_SHIFT}px`, // lowered along with navbar
-    transition: 'top 0.6s ease'
-  }}
->
+    {rightLinks.map((link, i) => (
+      <a
+        key={i}
+        ref={el => (navRefs.current[leftLinks.length + i] = el)}
+        onClick={() => handleLinkClick(link)}
+        className="nav-link"
+      >
+        {link.name}
+      </a>
+    ))}
+  </div>
+
+  <div
+    className="logo-container"
+    onClick={() => navigate('/')}
+    style={{
+      top: isScrolled
+        ? '30px'
+        : `${30 + NAVBAR_VERTICAL_SHIFT}px`,
+      transition: 'top 0.6s ease'
+    }}
+  >
+
+
   <div className="inner-circle">
     <img
       src={AtaataLogoImg}

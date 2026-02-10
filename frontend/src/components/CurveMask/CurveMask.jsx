@@ -1,60 +1,49 @@
+// src/components/CurveMask/CurveMask.jsx
 import React, { useEffect, useState } from 'react';
-import './CurveMask.css';
-import { NAVBAR_CURVE, getCurvePath } from '../navbarCurve';
-import TabloidHero from '../TabloidHero/TabloidHero';
 
-const CurveMask = () => {
-  const maskHeight = NAVBAR_CURVE.height + NAVBAR_CURVE.maskPadding;
-  const [logoPos, setLogoPos] = useState(null);
+const CurveMask = ({
+  thickness = 0,        // height of the bar
+  color = 'white',      // visible color
+  verticalOffset = 0,   // shift up/down relative to navbar curve
+  zIndex = 1001         // configurable z-index
+}) => {
+  const [path, setPath] = useState('');
+
+  const updatePath = () => {
+    const width = window.innerWidth;
+    const P0 = { x: 0, y: 250 };
+    const P1 = { x: width / 2, y: 100 };
+    const P2 = { x: width, y: 250 };
+
+    const d = `
+      M ${P0.x},${P0.y + verticalOffset}
+      Q ${P1.x},${P1.y + verticalOffset} ${P2.x},${P2.y + verticalOffset}
+      L ${P2.x},${P2.y + verticalOffset + thickness}
+      Q ${P1.x},${P1.y + verticalOffset + thickness} ${P0.x},${P0.y + verticalOffset + thickness}
+      Z
+    `;
+    setPath(d);
+  };
 
   useEffect(() => {
-    const updateLogoPosition = () => {
-      const logo = document.querySelector('.logo-container');
-      if (!logo) return;
-
-      const rect = logo.getBoundingClientRect();
-
-      setLogoPos({
-        centerX: rect.left + rect.width / 2,
-        centerY: rect.top + rect.height / 2
-      });
-    };
-
-    updateLogoPosition();
-    window.addEventListener('resize', updateLogoPosition);
-    window.addEventListener('scroll', updateLogoPosition);
-
-    return () => {
-      window.removeEventListener('resize', updateLogoPosition);
-      window.removeEventListener('scroll', updateLogoPosition);
-    };
+    updatePath();
+    window.addEventListener('resize', updatePath);
+    return () => window.removeEventListener('resize', updatePath);
   }, []);
-
-  if (!logoPos) return null;
 
   return (
     <svg
-      className="curve-mask"
-      viewBox={`0 0 1000 ${maskHeight}`}
-      preserveAspectRatio="none"
+      style={{
+        position: 'absolute',
+        top: -23,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: zIndex, // <-- applies stacking
+      }}
     >
-      <defs>
-        <mask id="tabloid-mask">
-          <path d={getCurvePath(NAVBAR_CURVE)} fill="white" />
-        </mask>
-      </defs>
-
-      <rect width="100%" height={maskHeight} fill="transparent" />
-
-      <foreignObject
-        width="100%"
-        height={maskHeight}
-        mask="url(#tabloid-mask)"
-      >
-        <div className="tabloid-hero-container">
-          <TabloidHero logoPos={logoPos} />
-        </div>
-      </foreignObject>
+      <path fill={color} d={path} />
     </svg>
   );
 };

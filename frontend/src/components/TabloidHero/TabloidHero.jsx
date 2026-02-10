@@ -27,8 +27,8 @@ const TabloidHero = () => {
   const rightScalesX = [1.8, 1.8, 1.8];
 
   // Manual X offsets (adjust left/right along horizontal axis)
-  const leftOffsetsX = [-300, -200, -70];  
-  const rightOffsetsX = [70, 200, 300];
+  const leftOffsetsX = [-320, -200, -70];  
+  const rightOffsetsX = [70, 220, 350];
 
   // Manual Y offsets (fine tune vertical position)
   const leftOffsetsY = [0, 15, 30];  

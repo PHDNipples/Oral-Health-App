@@ -1,30 +1,54 @@
+/* Container for TabloidHero */
 .tabloid-hero {
   position: absolute;
   inset: 0;
-
-  /* Center reference point, relative to SVG width */
+  z-index: 1; /* behind navbar */
   --ata-center-x: 50%;
-  --ata-offset-x: 6rem; /* distance from logo center, adjustable */
-  --ata-offset-y: -1rem; /* vertical shift */
+  --ata-offset-x: 6rem;
 }
 
-.ata {
+/* Containers for stretching left/right */
+.ata-container {
   position: absolute;
-  top: var(--ata-offset-y);
-  font-size: clamp(4rem, 10vw, 10rem);
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  top: 0; /* vertical handled via transformY */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* LEFT container */
+.ata-left-container {
+  left: 0;
+  width: calc(var(--ata-center-x) - var(--ata-offset-x));
+  justify-content: flex-end;
+  padding-left: 1rem; /* safe margin */
+  box-sizing: border-box;
+}
+
+/* RIGHT container */
+.ata-right-container {
+  left: calc(var(--ata-center-x) + var(--ata-offset-x));
+  width: calc(100% - (var(--ata-center-x) + var(--ata-offset-x)));
+  justify-content: flex-start;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+/* ATA Text Styling */
+.ata {
+  font-size: clamp(10rem, 12vw, 15rem); /* BIG & bold */
+  font-weight: 900;
   line-height: 1;
   color: black;
+  text-transform: uppercase;
+  font-family: 'Arial Black', sans-serif;
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
   white-space: nowrap;
+  width: 100%; /* fill container for JS letter-spacing */
 }
 
-.ata-left {
-  left: calc(var(--ata-center-x) - var(--ata-offset-x));
-  transform: translateX(-100%); /* move left by width of element */
-}
-
-.ata-right {
-  left: calc(var(--ata-center-x) + var(--ata-offset-x));
-  transform: translateX(0); /* no extra offset */
-}
+/* Text alignment inside containers */
+.ata-left { text-align: right; }
+.ata-right { text-align: left; }

@@ -1,54 +1,49 @@
-/* Container for TabloidHero */
 .tabloid-hero {
   position: absolute;
   inset: 0;
-  z-index: 1; /* behind navbar */
-  --ata-center-x: 50%;
-  --ata-offset-x: 6rem;
+  z-index: 1;
 }
 
-/* Containers for stretching left/right */
+/* Containers */
 .ata-container {
   position: absolute;
   display: flex;
   align-items: flex-start;
   overflow: hidden;
-  top: 0; /* vertical handled via transformY */
+  top: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* LEFT container */
 .ata-left-container {
   left: 0;
-  width: calc(var(--ata-center-x) - var(--ata-offset-x));
+  width: calc(var(--ata-center-x, 50%) - var(--ata-offset-x, 6rem));
   justify-content: flex-end;
-  padding-left: 1rem; /* safe margin */
+  padding-left: 1rem;
   box-sizing: border-box;
 }
 
-/* RIGHT container */
 .ata-right-container {
-  left: calc(var(--ata-center-x) + var(--ata-offset-x));
-  width: calc(100% - (var(--ata-center-x) + var(--ata-offset-x)));
+  left: calc(var(--ata-center-x, 50%) + var(--ata-offset-x, 6rem));
+  width: calc(100% - (var(--ata-center-x, 50%) + var(--ata-offset-x, 6rem)));
   justify-content: flex-start;
   padding-right: 1rem;
   box-sizing: border-box;
 }
 
-/* ATA Text Styling */
-.ata {
-  font-size: clamp(10rem, 12vw, 15rem); /* BIG & bold */
+/* Letters */
+.ata-letter {
+  font-size: clamp(10rem, 12vw, 15rem);
   font-weight: 900;
   line-height: 1;
   color: black;
   text-transform: uppercase;
-  font-family: 'Arial Black', sans-serif;
+  font-family: 'Franklin Gothic Heavy', 'Arial Black', sans-serif;
   text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+  display: inline-block;
   white-space: nowrap;
-  width: 100%; /* fill container for JS letter-spacing */
+  transition: transform 0.2s ease;
 }
 
-/* Text alignment inside containers */
 .ata-left { text-align: right; }
 .ata-right { text-align: left; }

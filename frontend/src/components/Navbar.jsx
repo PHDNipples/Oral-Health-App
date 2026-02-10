@@ -18,7 +18,7 @@ const routeColors = {
 };
 
 // Amount to lower the navbar visually
-const NAVBAR_VERTICAL_SHIFT = 80;
+const NAVBAR_VERTICAL_SHIFT = 90;
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);

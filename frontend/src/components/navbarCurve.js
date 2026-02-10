@@ -1,11 +1,11 @@
 export const NAVBAR_CURVE = {
-  width: 1000,      // full SVG width
-  height: 250,      // visible curve height
-  controlY: -80,    // curve control point
-  maskPadding: 20,
+  width: 500,       // full SVG width
+  height: 140,      // lower overall curve height, raises the top of letters
+  controlY: -60,    // lifts the center, giving a straighter curve
+  maskPadding: 20,  // padding for masking covered bottom of letters
 };
 
-// Returns SVG path (existing)
+// Returns SVG path
 export function getCurvePath({ width, height, controlY }) {
   return `
     M 0 ${height}
@@ -20,8 +20,8 @@ export function getCurvePath({ width, height, controlY }) {
 export function getCurveY(x, { width, height, controlY }) {
   const t = x / width;
   const y =
-    (1 - t) * (1 - t) * height +
-    2 * (1 - t) * t * controlY +
-    t * t * height;
+    (1 - t) * (1 - t) * height +      // start influence
+    2 * (1 - t) * t * controlY +      // curve control influence
+    t * t * height;                    // end influence
   return y;
 }

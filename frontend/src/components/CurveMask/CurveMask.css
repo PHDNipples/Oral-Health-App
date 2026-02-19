@@ -1,0 +1,19 @@
+/* src/components/CurveMask/CurveMask.css */
+
+.curve-mask {
+  position: absolute; /* relative to parent container */
+  top: -25px;             /* stick to top of TabloidHero container */
+  left: 0;
+  width: 100%;
+  pointer-events: none; /* clicks pass through */
+  z-index: 10;          /* above TabloidHero text */
+}
+
+
+
+/* Ensure SVG fills container cleanly */
+.curve-mask svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}

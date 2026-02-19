@@ -181,7 +181,8 @@ const Home = () => {
           </div>
         </div>
       </section>
-                  {/* App Banner */}
+
+      {/* App Banner */}
       <AppBanner />
       
     </main>

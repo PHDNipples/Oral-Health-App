@@ -1,0 +1,49 @@
+.tabloid-hero {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Containers */
+.ata-container {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ata-left-container {
+  left: 0;
+  width: calc(var(--ata-center-x, 50%) - var(--ata-offset-x, 6rem));
+  justify-content: flex-end;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.ata-right-container {
+  left: calc(var(--ata-center-x, 50%) + var(--ata-offset-x, 6rem));
+  width: calc(100% - (var(--ata-center-x, 50%) + var(--ata-offset-x, 6rem)));
+  justify-content: flex-start;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+/* Letters */
+.ata-letter {
+  font-size: clamp(10rem, 12vw, 15rem);
+  font-weight: 900;
+  line-height: 1;
+  color: black;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Heavy', 'Arial Black', sans-serif;
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+  display: inline-block;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+
+.ata-left { text-align: right; }
+.ata-right { text-align: left; }

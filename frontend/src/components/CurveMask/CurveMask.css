@@ -1,19 +1,19 @@
+/* src/components/CurveMask/CurveMask.css */
+
 .curve-mask {
-  position: absolute;
-  top: 0;              /* align with navbar top */
+  position: absolute; /* relative to parent container */
+  top: -25px;             /* stick to top of TabloidHero container */
   left: 0;
   width: 100%;
-  height: auto;
-  z-index: 3;       /* above ribbon, below logo */
-  fill: rgb(255, 255, 255);
-  pointer-events: none;
+  pointer-events: none; /* clicks pass through */
+  z-index: 10;          /* above TabloidHero text */
 }
 
-.tabloid-hero-container {
+
+
+/* Ensure SVG fills container cleanly */
+.curve-mask svg {
+  display: block;
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 20px;   /* vertical padding under navbar curve */
+  height: auto;
 }

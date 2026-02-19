@@ -207,8 +207,13 @@ const Navbar = () => {
       `}</style>
 
       <div className="navbar-wrapper">
+  
   <div className={`ribbon-container ${isScrolled ? 'scrolled' : ''}`}>
-    <svg className="svg-arch" viewBox="0 0 1000 650" preserveAspectRatio="none">
+    <svg
+      className="svg-arch"
+      viewBox="0 0 1000 650"
+      preserveAspectRatio="none"
+    >
       <path
         fill={navbarColor}
         d={
@@ -220,49 +225,54 @@ const Navbar = () => {
     </svg>
   </div>
 
-  {/* CURVE MASK BAR — correct stacking context */}
-  <CurveMask
-    thickness={40}
-    color="red"
-    verticalOffset={0}
-  />
-
-  <TabloidHero />
-
   <div className={`green-container ${isScrolled ? 'scrolled' : ''}`}>
-    <svg className="svg-arch" viewBox="0 0 1000 250" preserveAspectRatio="none">
-      <path fill="transparent" d="M0,250 Q500,30 1000,250 L1000,250 L0,250 Z" />
+    <svg
+      className="svg-arch"
+      viewBox="0 0 1000 250"
+      preserveAspectRatio="none"
+    >
+      <path
+        fill="transparent"
+        d="M0,250 Q500,30 1000,250 L1000,250 L0,250 Z"
+      />
     </svg>
   </div>
 
   <div className="nav-links">
-    {leftLinks.filter(link => !link.auth || currentUser).map((link, i) => (
-      <div key={i} style={{ position: 'relative' }} ref={el => (navRefs.current[i] = el)}>
-        <a
-          onClick={() =>
-            link.isDropdown
-              ? setLanguageDropdown(!languageDropdown)
-              : handleLinkClick(link)
-          }
-          className="nav-link"
+    {leftLinks
+      .filter(link => !link.auth || currentUser)
+      .map((link, i) => (
+        <div
+          key={i}
+          style={{ position: 'relative' }}
+          ref={el => (navRefs.current[i] = el)}
         >
-          {link.name}
-        </a>
-        {link.isDropdown && (
-          <div className={`dropdown ${languageDropdown ? 'visible' : ''}`}>
-            {languages.map((lang, idx) => (
-              <div
-                key={idx}
-                className="dropdown-item"
-                onClick={() => handleLanguageSelect(lang)}
-              >
-                {lang}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    ))}
+          <a
+            onClick={() =>
+              link.isDropdown
+                ? setLanguageDropdown(!languageDropdown)
+                : handleLinkClick(link)
+            }
+            className="nav-link"
+          >
+            {link.name}
+          </a>
+
+          {link.isDropdown && (
+            <div className={`dropdown ${languageDropdown ? 'visible' : ''}`}>
+              {languages.map((lang, idx) => (
+                <div
+                  key={idx}
+                  className="dropdown-item"
+                  onClick={() => handleLanguageSelect(lang)}
+                >
+                  {lang}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
 
     {rightLinks.map((link, i) => (
       <a
@@ -286,21 +296,32 @@ const Navbar = () => {
       transition: 'top 0.6s ease'
     }}
   >
-
-
-  <div className="inner-circle">
-    <img
-      src={AtaataLogoImg}
-      alt="Ataata Logo"
-      className="logo-svg"
-      style={{ transform: 'translateY(0)', transition: 'transform 0.2s ease' }}
-    />
+    <div className="inner-circle">
+      <img
+        src={AtaataLogoImg}
+        alt="Ataata Logo"
+        className="logo-svg"
+        style={{
+          transform: 'translateY(0)',
+          transition: 'transform 0.2s ease'
+        }}
+      />
+    </div>
+    
   </div>
+        
 </div>
 
-      </div>
+{/* 🔥 CurveMask is now OUTSIDE navbar-wrapper */}
+<CurveMask
+  thickness={32}
+  color="background"
+  verticalOffset={14}
+/>
 
-      <div className="spacer"></div>
+<TabloidHero />
+
+<div className="spacer"></div>
     </>
   );
 };

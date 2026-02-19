@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './TabloidHero.css';
 import { NAVBAR_CURVE, getCurveY } from '../navbarCurve';
-import CurveMask from '../CurveMask/CurveMask'; // import the bar
 
 const TabloidHero = () => {
   const heroRef = useRef(null);
@@ -41,7 +40,12 @@ const TabloidHero = () => {
     const left = ATA_LEFT.map((_, i) => {
       const x = (i + 0.5) * (leftWidth / ATA_LEFT.length);
       const svgX = screenToSvgX(x);
-      return getCurveY(svgX, NAVBAR_CURVE) - RAISE_OFFSET + TOP_PADDING + leftOffsetsY[i];
+      return (
+        getCurveY(svgX, NAVBAR_CURVE) -
+        RAISE_OFFSET +
+        TOP_PADDING +
+        leftOffsetsY[i]
+      );
     });
 
     // RIGHT letters
@@ -50,7 +54,12 @@ const TabloidHero = () => {
     const right = ATA_RIGHT.map((_, i) => {
       const x = (i + 0.5) * (rightWidth / ATA_RIGHT.length);
       const svgX = screenToSvgX(heroWidth - rightWidth + x);
-      return getCurveY(svgX, NAVBAR_CURVE) - RAISE_OFFSET + TOP_PADDING + rightOffsetsY[i];
+      return (
+        getCurveY(svgX, NAVBAR_CURVE) -
+        RAISE_OFFSET +
+        TOP_PADDING +
+        rightOffsetsY[i]
+      );
     });
 
     setLetterOffsets({ left, right });
@@ -76,7 +85,7 @@ const TabloidHero = () => {
                 translateX(${leftOffsetsX[i]}px)
                 scaleY(${leftScalesY[i]})
                 scaleX(${leftScalesX[i]})
-              `
+              `,
             }}
           >
             {letter}
@@ -96,21 +105,13 @@ const TabloidHero = () => {
                 translateX(${rightOffsetsX[i]}px)
                 scaleY(${rightScalesY[i]})
                 scaleX(${rightScalesX[i]})
-              `
+              `,
             }}
           >
             {letter}
           </span>
         ))}
       </div>
-
-      {/* CURVE MASK BAR (red) */}
-      <CurveMask
-        top="90px"       // manually place above navbar (adjust as needed)
-        thickness={40}   // adjustable thickness
-        color="red"      // clearly visible
-        curvature={0.5}  // adjustable curvature
-      />
     </div>
   );
 };

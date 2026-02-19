@@ -1,27 +1,29 @@
 // src/components/CurveMask/CurveMask.jsx
 import React, { useEffect, useState } from 'react';
+import './curveMask.css';
+
+const RIBBON_HEIGHT = 250; // match .ribbon-container height
 
 const CurveMask = ({
-  thickness = 0,        // height of the bar
-  color = 'white',      // visible color
-  verticalOffset = 0,   // shift up/down relative to navbar curve
-  zIndex = 1001         // configurable z-index
+  thickness = 30,
+  color = 'white'
 }) => {
   const [path, setPath] = useState('');
 
   const updatePath = () => {
     const width = window.innerWidth;
-    const P0 = { x: 0, y: 250 };
-    const P1 = { x: width / 2, y: 100 };
-    const P2 = { x: width, y: 250 };
+
+    const bottomY = RIBBON_HEIGHT;
+    const controlY = 100;
 
     const d = `
-      M ${P0.x},${P0.y + verticalOffset}
-      Q ${P1.x},${P1.y + verticalOffset} ${P2.x},${P2.y + verticalOffset}
-      L ${P2.x},${P2.y + verticalOffset + thickness}
-      Q ${P1.x},${P1.y + verticalOffset + thickness} ${P0.x},${P0.y + verticalOffset + thickness}
+      M 0,${bottomY}
+      Q ${width / 2},${controlY} ${width},${bottomY}
+      L ${width},${bottomY + thickness}
+      Q ${width / 2},${controlY + thickness} 0,${bottomY + thickness}
       Z
     `;
+
     setPath(d);
   };
 
@@ -33,15 +35,11 @@ const CurveMask = ({
 
   return (
     <svg
-      style={{
-        position: 'absolute',
-        top: -23,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        zIndex: zIndex, // <-- applies stacking
-      }}
+      className="curve-mask"
+      width="100%"
+      height={RIBBON_HEIGHT + thickness}
+      viewBox={`0 0 ${window.innerWidth} ${RIBBON_HEIGHT + thickness}`}
+      preserveAspectRatio="none"
     >
       <path fill={color} d={path} />
     </svg>

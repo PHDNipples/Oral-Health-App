@@ -1,6 +1,6 @@
 // src/components/CurveMask/CurveMask.jsx
 import React, { useEffect, useState } from 'react';
-import './curveMask.css';
+import './CurveMask.css';
 
 const RIBBON_HEIGHT = 250; // match .ribbon-container height
 

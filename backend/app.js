@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path"); // Added for serving frontend
 
 dotenv.config();
 
@@ -26,12 +27,22 @@ mongoose
     process.exit(1);
   });
 
-// Routes
+// API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
-// Health check
-app.get("/", (req, res) => {
+// Serve frontend in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  // Serve index.html for all frontend routes
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"))
+  );
+}
+
+// Health check (optional)
+app.get("/api/health", (req, res) => {
   res.json({ message: "Oral Health App backend is running 🚀" });
 });
 

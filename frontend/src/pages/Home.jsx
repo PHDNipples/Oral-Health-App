@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import HTMLFlipBook from "react-pageflip";
 import { TiArrowForward } from "react-icons/ti";
 import AppBanner from "../components/Banner.jsx";
+import StickerPeel from "../components/StickerPeel"; 
+import parentsLogo from "../images/parents-sticker.png"; 
+import kiddiesLogo from "../images/kiddies-sticker.png"; 
 import "./Home.css";
 
 /* Social posts */
@@ -12,8 +14,6 @@ const socialPosts = [
 ];
 
 const Home = () => {
-  const parentsBook = useRef(null);
-  const kiddiesBook = useRef(null);
   const containerRef = useRef(null);
 
   const [bookWidth, setBookWidth] = useState(300);
@@ -33,34 +33,6 @@ const Home = () => {
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
-
-  /* Flipbook pages */
-  const parentsPages = useMemo(() => [
-    <div className="broche-cover modern-card" key="p1">For Parents</div>,
-    <div className="broche-back modern-card" key="p2">
-      <h3>Hello Parents!</h3>
-      <p>It’s a team effort keeping your kiddies’ teeth happy and healthy — you are the captain of the ship!</p>
-      <p>Explore oral health topics, common tooth situations, and treatment options.</p>
-      <p>Create a family group, track progress, and earn points together.</p>
-    </div>
-  ], []);
-
-  const kiddiesPages = useMemo(() => [
-    <div className="broche-cover kiddies-cover modern-card" key="k1">For Children</div>,
-    <div className="broche-back mirrored-page modern-card" key="k2">
-      <h3>Hello Kiddies!</h3>
-      <p>Ata'ata makes keeping your teeth healthy and happy EASY.</p>
-      <p>Find your teeth, add them to your profile, and learn how to keep them clean.</p>
-      <p>Get to know your dentist so it’s not awkward when you meet them.</p>
-      <p>Ask questions anytime and track your smile journey!</p>
-    </div>
-  ], []);
-
-  /* Flipbook controls */
-  const flipParentsNext = () => parentsBook.current?.pageFlip()?.flipNext();
-  const flipParentsPrev = () => parentsBook.current?.pageFlip()?.flipPrev();
-  const flipKiddiesNext = () => kiddiesBook.current?.pageFlip()?.flipNext();
-  const flipKiddiesPrev = () => kiddiesBook.current?.pageFlip()?.flipPrev();
 
   /* Social carousel */
   const [index, setIndex] = useState(0);
@@ -103,42 +75,47 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Flipbooks */}
-      <section className="broche-section">
-        <div className="broche-container" ref={containerRef}>
-          {/* Parents */}
-          <div className="broche-wrapper">
-            <HTMLFlipBook
-              width={bookWidth}
-              height={bookHeight}
-              className="broche-flipbook parents-flip"
-              ref={parentsBook}
-              flipOnClick
-            >
-              {parentsPages}
-            </HTMLFlipBook>
-            <button className="flipbook-page-button parents-page-prev" onClick={flipParentsNext}><TiArrowForward /></button>
-            <button className="flipbook-page-button parents-page-next" onClick={flipParentsPrev}><TiArrowForward /></button>
-          </div>
+      {/* Sticker Peel Section */}
+<section className="broche-section">
+  <div
+    className="broche-container"
+    ref={containerRef}
+    style={{
+      display: "flex",
+      justifyContent: "space-between", 
+      width: "100%",
+      maxWidth: "1000px",
+      margin: "0 auto",
+      gap: "20px"
+    }}
+  >
+    {/* Parents Sticker */}
+    <StickerPeel
+      imageSrc={parentsLogo}
+      width={bookWidth * 1}
+      rotate={5}
+      peelBackHoverPct={15}
+      peelBackActivePct={85}
+      shadowIntensity={0.5}
+      lightingIntensity={0.1}
+      peelDirection={90}
+      className="parents-sticker"
+    />
 
-          {/* Kiddies */}
-          <div className="broche-wrapper mirrored-book">
-            <HTMLFlipBook
-              width={bookWidth}
-              height={bookHeight}
-              className="broche-flipbook kiddies-flip"
-              ref={kiddiesBook}
-              flipOnClick={false}
-              drawShadow={false}
-              startPage={0}
-            >
-              {kiddiesPages}
-            </HTMLFlipBook>
-            <button className="flipbook-page-button kiddies-page-prev" onClick={flipKiddiesPrev}><TiArrowForward /></button>
-            <button className="flipbook-page-button kiddies-page-next" onClick={flipKiddiesNext}><TiArrowForward /></button>
-          </div>
-        </div>
-      </section>
+    {/* Kiddies Sticker */}
+    <StickerPeel
+      imageSrc={kiddiesLogo}
+      width={bookWidth * 1}
+      rotate={-5}
+      peelBackHoverPct={20}
+      peelBackActivePct={85}
+      shadowIntensity={0.6}
+      lightingIntensity={0.15}
+      peelDirection={-90}
+      className="kiddies-sticker"
+    />
+  </div>
+</section>
 
       {/* Social Section */}
       <section className="social-section">

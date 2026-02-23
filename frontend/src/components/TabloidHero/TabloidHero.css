@@ -1,39 +1,56 @@
+/* ===============================
+   TABLOID HERO (SAFE VERSION)
+================================ */
+
 .tabloid-hero {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+  position: relative;          /* was absolute */
+  width: 100%;
+  height: auto;
+  min-height: 220px;           /* adjust if needed */
+  display: block;
+  z-index: 1;                  /* stays behind interactive UI */
+  pointer-events: none;        /* IMPORTANT: hero never blocks clicks */
+  overflow: visible;           /* allow large letters to extend */
 }
 
-/* Containers */
+/* ===============================
+   LETTER CONTAINERS
+================================ */
+
 .ata-container {
-  position: absolute;
+  position: absolute;          /* keeps your curve math working */
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: flex-start;
-  overflow: hidden;
-  top: 0;
-  width: 100%;
+  overflow: visible;           /* no clipping */
   box-sizing: border-box;
+  pointer-events: none;        /* never block interactions */
 }
 
+/* LEFT SIDE */
 .ata-left-container {
   left: 0;
   width: calc(var(--ata-center-x, 50%) - var(--ata-offset-x, 6rem));
   justify-content: flex-end;
   padding-left: 1rem;
-  box-sizing: border-box;
 }
 
+/* RIGHT SIDE */
 .ata-right-container {
   left: calc(var(--ata-center-x, 50%) + var(--ata-offset-x, 6rem));
   width: calc(100% - (var(--ata-center-x, 50%) + var(--ata-offset-x, 6rem)));
   justify-content: flex-start;
   padding-right: 1rem;
-  box-sizing: border-box;
 }
 
-/* Letters */
+/* ===============================
+   LETTER STYLING
+================================ */
+
 .ata-letter {
-  font-size: clamp(10rem, 12vw, 15rem);
+  font-size: clamp(8rem, 12vw, 15rem);  /* slightly more responsive */
   font-weight: 900;
   line-height: 1;
   color: black;
@@ -43,7 +60,13 @@
   display: inline-block;
   white-space: nowrap;
   transition: transform 0.2s ease;
+  pointer-events: none;        /* letters never block buttons */
 }
 
-.ata-left { text-align: right; }
-.ata-right { text-align: left; }
+.ata-left {
+  text-align: right;
+}
+
+.ata-right {
+  text-align: left;
+}

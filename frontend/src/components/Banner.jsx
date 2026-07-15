@@ -44,7 +44,7 @@ const AppBanner = () => {
         {/* Contact */}
         <div className="app-contact">
           <h4>CONTACT US</h4>
-          <a href="mailto:hello@ataata.nz">EMAIL</a>
+          <a href="ataata@gmail.com">EMAIL</a>
           <a
             href="https://instagram.com"
             target="_blank"

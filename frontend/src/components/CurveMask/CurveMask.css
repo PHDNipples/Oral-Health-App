@@ -1,19 +1,8 @@
-/* src/components/CurveMask/CurveMask.css */
-
 .curve-mask {
-  position: absolute; /* relative to parent container */
-  top: -25px;             /* stick to top of TabloidHero container */
+  position: fixed;
+  top: 90px; /* NAVBAR_VERTICAL_SHIFT — ribbon starts here */
   left: 0;
   width: 100%;
-  pointer-events: none; /* clicks pass through */
-  z-index: 10;          /* above TabloidHero text */
-}
-
-
-
-/* Ensure SVG fills container cleanly */
-.curve-mask svg {
-  display: block;
-  width: 100%;
-  height: auto;
+  pointer-events: none;
+  z-index: 56; /* above TabloidHero (z-index 1) and ribbon (z-index 50) */
 }

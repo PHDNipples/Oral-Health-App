@@ -7,18 +7,27 @@
   z-index: 1;
   pointer-events: none;
   overflow: visible;
-  transform-origin: top center;
-  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .tabloid-hero--scrolled {
-  transform: scaleY(0);
-  opacity: 0;
+  transform: none;
+  opacity: 1;
 }
+
+.tabloid-hero-side-image {
+  position: absolute;
+  top: 250px;
+  width: clamp(3rem, 8vw, 7rem);
+  height: auto;
+  z-index: 3000;
+}
+
+.tabloid-hero-side-image--left { left: 1rem; }
+.tabloid-hero-side-image--right { right: 1rem; }
 
 .ata-container {
   position: absolute;
-  top: 0;
+  top: 0px;
   left: 0;
   width: 100%;
   display: flex;

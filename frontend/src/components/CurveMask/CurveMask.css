@@ -1,8 +1,12 @@
 .curve-mask {
   position: fixed;
-  top: 90px; /* NAVBAR_VERTICAL_SHIFT — ribbon starts here */
+  top: 900px; /* NAVBAR_VERTICAL_SHIFT — ribbon starts here */
   left: 0;
   width: 100%;
   pointer-events: none;
-  z-index: 56; /* above TabloidHero (z-index 1) and ribbon (z-index 50) */
+  z-index: 1001;
+  height: 250px;
+  top: 90px;
 }
+
+.curve-mask--scrolled { top: 0; }

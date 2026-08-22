@@ -4,11 +4,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import AtaataLogoImg from '../Logo/Ataata.svg';
 import TabloidHero from './TabloidHero/TabloidHero';
-import CurveMask from './CurveMask/CurveMask';
 import LogoSpinner from './LogoSpinner';
 import { gsap } from 'gsap';
 import '../index.css';
 import './Navbar.css';
+import { NAVBAR_CURVE, getCurveAngle, getCurveY } from './navbarCurve';
 
 const routeColors = {
   '/': '#e08fff',
@@ -81,18 +81,12 @@ const Navbar = () => {
     console.log('Selected language:', lang);
   };
 
-
+// Increase this value to lower links; decrease it to raise them.
+const NAV_LINK_VERTICAL_OFFSET = 45;
 
   // ===== Update nav link positions
   useEffect(() => {
     const updatePositions = () => {
-      const P0 = { x: 0, y: 250 };
-      const P1 = { x: 500, y: 100 };
-      const P2 = { x: 1000, y: 250 };
-      const verticalOffset = 10;
-      const rotationFactor = 0.4;
-      const uniformYOffset = 30;
-
       const logo = document.querySelector('.logo-container');
       const logoWidth = logo?.offsetWidth || 200;
       const logoX = window.innerWidth / 2 - logoWidth / 2;
@@ -108,18 +102,16 @@ const Navbar = () => {
         if (!el) return;
         const spacing = leftRange / visibleLeft.length;
         const x = logoX - spacing * (visibleLeft.length - i);
-        const t = x / window.innerWidth;
-        const yCurve = (1 - t) ** 2 * P0.y + 2 * (1 - t) * t * P1.y + t ** 2 * P2.y;
-        const angle = Math.atan2(
-          2 * (1 - t) * (P1.y - P0.y) + 2 * t * (P2.y - P1.y),
-          2 * (1 - t) * (P1.x - P0.x) + 2 * t * (P2.x - P1.x)
-        ) * rotationFactor;
-
         el.style.position = 'absolute';
         el.style.left = `${x}px`;
+        const linkWidth = el.offsetWidth || 24;
+        const linkHeight = el.offsetHeight || 24;
+        const linkCenterX = x + linkWidth / 2;
+        const yCurve = getCurveY(linkCenterX, window.innerWidth, NAVBAR_CURVE);
+        const angle = getCurveAngle(linkCenterX, window.innerWidth, NAVBAR_CURVE);
         el.style.top = `${isScrolled
           ? 60
-          : yCurve - (el.offsetHeight || 24) - verticalOffset - uniformYOffset + NAVBAR_VERTICAL_SHIFT
+          : yCurve + NAVBAR_VERTICAL_SHIFT + NAV_LINK_VERTICAL_OFFSET - linkHeight / 2
         }px`;
         el.style.transform = isScrolled ? 'rotate(0rad)' : `rotate(${angle}rad)`;
         el.style.transition = 'top 0.2s ease, left 0.2s ease, transform 0.2s ease';
@@ -133,18 +125,16 @@ const Navbar = () => {
         if (!el) return;
         const spacing = rightRange / visibleRight.length;
         const x = logoRightX + spacing * (i + 1);
-        const t = x / window.innerWidth;
-        const yCurve = (1 - t) ** 2 * P0.y + 2 * (1 - t) * t * P1.y + t ** 2 * P2.y;
-        const angle = Math.atan2(
-          2 * (1 - t) * (P1.y - P0.y) + 2 * t * (P2.y - P1.y),
-          2 * (1 - t) * (P1.x - P0.x) + 2 * t * (P2.x - P1.x)
-        ) * rotationFactor;
-
         el.style.position = 'absolute';
         el.style.left = `${x}px`;
+        const linkWidth = el.offsetWidth || 24;
+        const linkHeight = el.offsetHeight || 24;
+        const linkCenterX = x + linkWidth / 2;
+        const yCurve = getCurveY(linkCenterX, window.innerWidth, NAVBAR_CURVE);
+        const angle = getCurveAngle(linkCenterX, window.innerWidth, NAVBAR_CURVE);
         el.style.top = `${isScrolled
           ? 60
-          : yCurve - (el.offsetHeight || 24) - verticalOffset - uniformYOffset + NAVBAR_VERTICAL_SHIFT
+          : yCurve + NAVBAR_VERTICAL_SHIFT + NAV_LINK_VERTICAL_OFFSET - linkHeight / 2
         }px`;
         el.style.transform = isScrolled ? 'rotate(0rad)' : `rotate(${angle}rad)`;
         el.style.transition = 'top 0.2s ease, left 0.2s ease, transform 0.2s ease';
@@ -188,7 +178,7 @@ const Navbar = () => {
     <>
       <style>{`
         .navbar-wrapper { position: relative; z-index: 1000; }
-        .spacer { height: 360px; width: 100%; }
+        .spacer { height: 0px; width: 100%; }
 
         .ribbon-container, .green-container {
           position: fixed;
@@ -327,8 +317,6 @@ const Navbar = () => {
         </div>
       ))}
 
-    <div className="navbar-pill" ref={pillRef}></div>
-
     {rightLinks.map((link, i) => (
       <a
         key={i}
@@ -392,7 +380,6 @@ const Navbar = () => {
 </div>
 
 {/* ================= Hero Section Wrapper ================= */}
-<CurveMask thickness={40} color={navbarColor} />
 <TabloidHero isScrolled={isScrolled} />
 <div className="spacer"></div>
     </>

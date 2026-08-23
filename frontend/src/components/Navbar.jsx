@@ -56,12 +56,14 @@ const Navbar = () => {
     setNavbarColor(routeColors[location.pathname] || '#e08fff');
   }, [location]);
 
-  // Track scroll for logo/nav animation
+    // Track scroll for logo/nav animation
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  
 
   const handleLinkClick = async (link) => {
     if (link.action) {
@@ -155,7 +157,6 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
     const allLinks = [...leftLinks.filter(link => !link.auth || currentUser), ...rightLinks];
     const activeIndex = allLinks.findIndex(link => link.path === location.pathname);
     const defaultActive = navRefs.current[activeIndex] || null;
-
     const targetEl = activeEl || defaultActive;
     if (!targetEl) {
       pill.style.opacity = 0;
@@ -181,14 +182,15 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
         .spacer { height: 0px; width: 100%; }
 
         .ribbon-container, .green-container {
-          position: fixed;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
-          overflow: hidden;
-          z-index: 50;
-          transition: top 0.6s ease;
-        }
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  overflow: hidden;
+  z-index: 50;
+  transition: top 0.6s ease;
+}
+          
         .ribbon-container { height: 250px; top: ${NAVBAR_VERTICAL_SHIFT}px; }
         .green-container { height: 120px; top: ${NAVBAR_VERTICAL_SHIFT + 80}px; }
         .ribbon-container.scrolled, .green-container.scrolled { top: 0; }
@@ -258,7 +260,7 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
 {/* ================= Navbar Wrapper ================= */}
 <div className="navbar-wrapper">
   {/* Ribbon background */}
-  <div className={`ribbon-container ${isScrolled ? 'scrolled' : ''}`}>
+  <div className={`ribbon-container ${isScrolled ? 'scrolled' : ''}`}> 
     <svg className="svg-arch" viewBox="0 0 1000 650" preserveAspectRatio="none">
       <path
         fill={navbarColor}

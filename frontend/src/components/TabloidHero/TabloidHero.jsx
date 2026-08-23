@@ -34,24 +34,26 @@ const TabloidHero = ({ isScrolled = false }) => {
     const heroWidth = heroRef.current.offsetWidth;
     const leftContainer  = leftRef.current;
     const leftWidth      = leftContainer.offsetWidth;
+    const leftLetterWidth = leftWidth / ATA_LEFT.length;
     const left = ATA_LEFT.map((_, i) => {
-      const x = (i + 0.5) * (leftWidth / ATA_LEFT.length);
+      const x = (i + 0.5) * leftLetterWidth + leftOffsetsX[i];
       return getCurveY(x, heroWidth, NAVBAR_CURVE) + TOP_PADDING + leftOffsetsY[i];
     });
     const leftAngles = ATA_LEFT.map((_, i) => {
-      const x = (i + 0.5) * (leftWidth / ATA_LEFT.length);
+      const x = (i + 0.5) * leftLetterWidth + leftOffsetsX[i];
       return getCurveAngle(x, heroWidth, NAVBAR_CURVE);
     });
 
     const rightContainer = rightRef.current;
     const rightWidth     = rightContainer.offsetWidth;
+    const rightLetterWidth = rightWidth / ATA_RIGHT.length;
     const right = ATA_RIGHT.map((_, i) => {
-      const x = (i + 0.5) * (rightWidth / ATA_RIGHT.length);
-      return getCurveY(heroWidth - rightWidth + x, heroWidth, NAVBAR_CURVE) + TOP_PADDING + rightOffsetsY[i];
+      const x = heroWidth - rightWidth + (i + 0.5) * rightLetterWidth + rightOffsetsX[i];
+      return getCurveY(x, heroWidth, NAVBAR_CURVE) + TOP_PADDING + rightOffsetsY[i];
     });
     const rightAngles = ATA_RIGHT.map((_, i) => {
-      const x = (i + 0.5) * (rightWidth / ATA_RIGHT.length);
-      return getCurveAngle(heroWidth - rightWidth + x, heroWidth, NAVBAR_CURVE);
+      const x = heroWidth - rightWidth + (i + 0.5) * rightLetterWidth + rightOffsetsX[i];
+      return getCurveAngle(x, heroWidth, NAVBAR_CURVE);
     });
 
     setLetterOffsets({ left, right });

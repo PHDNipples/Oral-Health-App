@@ -1,29 +1,17 @@
-/* Outer shell — fills viewport, no transform, acts as positioning anchor */
-.tabloid-hero-shell {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 400px;
-  z-index: 51;
-  pointer-events: none;
-  overflow: visible;
-}
-
-/* Inner container — fixed design width, scaled uniformly */
 .tabloid-hero {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 400px;
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 220px;
   display: block;
+  z-index: 1;
   pointer-events: none;
   overflow: visible;
 }
 
 .tabloid-hero--scrolled {
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: none;
+  opacity: 1;
 }
 
 .tabloid-hero-side-image {
@@ -34,12 +22,12 @@
   z-index: 3000;
 }
 
-.tabloid-hero-side-image--left  { left: 1rem; }
+.tabloid-hero-side-image--left { left: 1rem; }
 .tabloid-hero-side-image--right { right: 1rem; }
 
 .ata-container {
   position: absolute;
-  top: 0;
+  top: 0px;
   left: 0;
   width: 100%;
   display: flex;
@@ -73,6 +61,7 @@
   text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
   display: inline-block;
   white-space: nowrap;
+  transition: transform 0.2s ease;
   pointer-events: none;
 }
 

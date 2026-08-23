@@ -1,12 +1,8 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './TabloidHero.css';
 import { NAVBAR_CURVE, getCurveAngle, getCurveY } from '../navbarCurve';
 import toothbrushImage from './toothbrush.svg';
 import flossImage from './floss.svg';
-
-const NAVBAR_VERTICAL_SHIFT = 90;
-const MASK_LIFT = 10;
-const DESIGN_WIDTH = 858;
 
 const TabloidHero = ({ isScrolled = false }) => {
   const heroRef  = useRef(null);
@@ -14,14 +10,15 @@ const TabloidHero = ({ isScrolled = false }) => {
   const rightRef = useRef(null);
 
   const [letterOffsets, setLetterOffsets] = useState({ left: [], right: [] });
-  const [letterAngles,  setLetterAngles]  = useState({ left: [], right: [] });
-  const [heroClipPath,  setHeroClipPath]  = useState('none');
-  const [scale, setScale] = useState(1);
+  const [letterAngles, setLetterAngles] = useState({ left: [], right: [] });
+  const [heroClipPath, setHeroClipPath] = useState('none');
 
   const ATA_LEFT  = ['A', 'T', 'A'];
   const ATA_RIGHT = ['A', 'T', 'A'];
 
+  // Shared vertical raise used by the previous curved hero layout.
   const TOP_PADDING = -125;
+  const MASK_LIFT = 10;
 
   const leftScalesY   = [1.2, 1,   1  ];
   const rightScalesY  = [1,   1,   1.3];
@@ -29,138 +26,120 @@ const TabloidHero = ({ isScrolled = false }) => {
   const rightScalesX  = [1.8, 1.8, 1.8];
   const leftOffsetsX  = [-320, -200, -70];
   const rightOffsetsX = [70,   220,  350];
-  const leftOffsetsY  = [0,   18,  30];
-  const rightOffsetsY = [30,  18,  -5];
+  const leftOffsetsY  = [0,   18,  30 ];
+  const rightOffsetsY = [30,  18,  -5 ];
 
-  const update = useCallback(() => {
-    if (!heroRef.current || !leftRef.current || !rightRef.current) return;
-
-    // Scale is based on actual viewport vs design width
-    const currentScale = window.innerWidth / DESIGN_WIDTH;
-    setScale(currentScale);
-
-    // All curve calculations use DESIGN_WIDTH as the screen width
-    // so they stay fixed at the designed positions
-    const w = DESIGN_WIDTH;
-
+  const updateLetterOffsets = () => {
+    if (!heroRef.current) return;
+    const heroWidth = heroRef.current.offsetWidth;
     const leftContainer  = leftRef.current;
     const leftWidth      = leftContainer.offsetWidth;
     const left = ATA_LEFT.map((_, i) => {
       const x = (i + 0.5) * (leftWidth / ATA_LEFT.length);
-      return getCurveY(x, w, NAVBAR_CURVE) + TOP_PADDING + leftOffsetsY[i];
+      return getCurveY(x, heroWidth, NAVBAR_CURVE) + TOP_PADDING + leftOffsetsY[i];
     });
     const leftAngles = ATA_LEFT.map((_, i) => {
       const x = (i + 0.5) * (leftWidth / ATA_LEFT.length);
-      return getCurveAngle(x, w, NAVBAR_CURVE);
+      return getCurveAngle(x, heroWidth, NAVBAR_CURVE);
     });
 
     const rightContainer = rightRef.current;
     const rightWidth     = rightContainer.offsetWidth;
     const right = ATA_RIGHT.map((_, i) => {
       const x = (i + 0.5) * (rightWidth / ATA_RIGHT.length);
-      return getCurveY(w - rightWidth + x, w, NAVBAR_CURVE) + TOP_PADDING + rightOffsetsY[i];
+      return getCurveY(heroWidth - rightWidth + x, heroWidth, NAVBAR_CURVE) + TOP_PADDING + rightOffsetsY[i];
     });
     const rightAngles = ATA_RIGHT.map((_, i) => {
       const x = (i + 0.5) * (rightWidth / ATA_RIGHT.length);
-      return getCurveAngle(w - rightWidth + x, w, NAVBAR_CURVE);
+      return getCurveAngle(heroWidth - rightWidth + x, heroWidth, NAVBAR_CURVE);
     });
 
     setLetterOffsets({ left, right });
     setLetterAngles({ left: leftAngles, right: rightAngles });
+  };
 
-    // Clip path is in the scaled container's coordinate space (DESIGN_WIDTH)
+  const updateHeroClipPath = () => {
     if (isScrolled) {
       setHeroClipPath('none');
       return;
     }
 
-    const numPoints = 80;
-    const curvePoints = Array.from({ length: numPoints + 1 }, (_, idx) => {
-      const x = (idx / numPoints) * w;
-      const y = NAVBAR_VERTICAL_SHIFT + getCurveY(x, w, NAVBAR_CURVE) - MASK_LIFT;
-      return `${x}px ${y}px`;
+    const heroWidth = heroRef.current?.offsetWidth || window.innerWidth;
+    const heroTop = heroRef.current?.getBoundingClientRect().top || 0;
+    const curvePoints = Array.from({ length: 61 }, (_, index) => {
+      const x = (index / 60) * heroWidth;
+      const y = 90 + getCurveY(x, heroWidth, NAVBAR_CURVE) - MASK_LIFT - heroTop;
+      return `${(index / 60) * 100}% ${y}px`;
     });
 
-    setHeroClipPath(
-      `polygon(0px 0px, ${w}px 0px, ${[...curvePoints].reverse().join(', ')})`
-    );
-  }, [isScrolled]);
+    setHeroClipPath(`polygon(0 0, 100% 0, ${curvePoints.reverse().join(', ')})`);
+  };
 
   useEffect(() => {
-    update();
-    window.addEventListener('resize', update);
-    const ro = new ResizeObserver(update);
-    if (heroRef.current) ro.observe(heroRef.current);
+    updateLetterOffsets();
+    updateHeroClipPath();
+    window.addEventListener('resize', updateLetterOffsets);
+    window.addEventListener('resize', updateHeroClipPath);
+    const resizeObserver = heroRef.current
+      ? new ResizeObserver(() => {
+        updateLetterOffsets();
+        updateHeroClipPath();
+      })
+      : null;
+    resizeObserver?.observe(heroRef.current);
     return () => {
-      window.removeEventListener('resize', update);
-      ro.disconnect();
+      window.removeEventListener('resize', updateLetterOffsets);
+      window.removeEventListener('resize', updateHeroClipPath);
+      resizeObserver?.disconnect();
     };
-  }, [update]);
+  }, [isScrolled]);
 
   return (
-    // Outer shell — always fills the viewport, no transform
-    <div className="tabloid-hero-shell">
-      {/* Inner container — fixed at DESIGN_WIDTH, scaled from top-left */}
-      <div
-        className={`tabloid-hero${isScrolled ? ' tabloid-hero--scrolled' : ''}`}
-        ref={heroRef}
-        style={{
-          clipPath: heroClipPath,
-          transform: `scale(${scale})`,
-          transformOrigin: 'top left',
-          width: `${DESIGN_WIDTH}px`,
-        }}
-      >
-        <img
-          className="tabloid-hero-side-image tabloid-hero-side-image--left"
-          src={toothbrushImage}
-          alt="Toothbrush"
-        />
-        <img
-          className="tabloid-hero-side-image tabloid-hero-side-image--right"
-          src={flossImage}
-          alt="Dental floss"
-        />
+    <div
+      className={`tabloid-hero${isScrolled ? ' tabloid-hero--scrolled' : ''}`}
+      ref={heroRef}
+      style={{ clipPath: heroClipPath }}
+    >
+      <img className="tabloid-hero-side-image tabloid-hero-side-image--left" src={toothbrushImage} alt="Toothbrush" />
+      <img className="tabloid-hero-side-image tabloid-hero-side-image--right" src={flossImage} alt="Dental floss" />
+      <div className="ata-container ata-left-container" ref={leftRef}>
+        {ATA_LEFT.map((letter, i) => (
+          <span
+            key={i}
+            className="ata-letter ata-left"
+            style={{
+              transform: `
+                translateY(${letterOffsets.left[i] || 0}px)
+                translateX(${leftOffsetsX[i]}px)
+                rotate(${letterAngles.left[i] || 0}rad)
+                scaleY(${leftScalesY[i]})
+                scaleX(${leftScalesX[i]})
+              `,
+            }}
+          >
+            {letter}
+          </span>
+        ))}
+      </div>
 
-        <div className="ata-container ata-left-container" ref={leftRef}>
-          {ATA_LEFT.map((letter, i) => (
-            <span
-              key={i}
-              className="ata-letter ata-left"
-              style={{
-                transform: `
-                  translateY(${letterOffsets.left[i] || 0}px)
-                  translateX(${leftOffsetsX[i]}px)
-                  rotate(${letterAngles.left[i] || 0}rad)
-                  scaleY(${leftScalesY[i]})
-                  scaleX(${leftScalesX[i]})
-                `,
-              }}
-            >
-              {letter}
-            </span>
-          ))}
-        </div>
-
-        <div className="ata-container ata-right-container" ref={rightRef}>
-          {ATA_RIGHT.map((letter, i) => (
-            <span
-              key={i}
-              className="ata-letter ata-right"
-              style={{
-                transform: `
-                  translateY(${letterOffsets.right[i] || 0}px)
-                  translateX(${rightOffsetsX[i]}px)
-                  rotate(${letterAngles.right[i] || 0}rad)
-                  scaleY(${rightScalesY[i]})
-                  scaleX(${rightScalesX[i]})
-                `,
-              }}
-            >
-              {letter}
-            </span>
-          ))}
-        </div>
+      <div className="ata-container ata-right-container" ref={rightRef}>
+        {ATA_RIGHT.map((letter, i) => (
+          <span
+            key={i}
+            className="ata-letter ata-right"
+            style={{
+              transform: `
+                translateY(${letterOffsets.right[i] || 0}px)
+                translateX(${rightOffsetsX[i]}px)
+                rotate(${letterAngles.right[i] || 0}rad)
+                scaleY(${rightScalesY[i]})
+                scaleX(${rightScalesX[i]})
+              `,
+            }}
+          >
+            {letter}
+          </span>
+        ))}
       </div>
     </div>
   );

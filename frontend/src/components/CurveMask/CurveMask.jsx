@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import './CurveMask.css';
 import { NAVBAR_CURVE, getCurveY } from '../navbarCurve';
-const NAVBAR_VERTICAL_SHIFT = 90;
 
-const CurveMask = ({ isScrolled = false, thickness = 30, color = 'white' }) => {
+const CurveMask = ({ isScrolled = false, verticalOffset = 0, color = '#f8f8f8' }) => {
   const [svgData, setSvgData] = useState({ path: '', width: 0 });
 
   const updatePath = () => {
     const w = window.innerWidth;
-    const numPoints = 60;
+    const numPoints = 80;
     const points = [];
 
-    // Sample the curve left to right for the top edge
     for (let i = 0; i <= numPoints; i++) {
       const screenX = (i / numPoints) * w;
-      const y = getCurveY(screenX, w);
+      const y = getCurveY(screenX, w, NAVBAR_CURVE) + verticalOffset;
       points.push(`${screenX},${y}`);
     }
 
-    const d = `M ${points.join(' L ')} L ${w},${NAVBAR_CURVE.ribbonHeight} L 0,${NAVBAR_CURVE.ribbonHeight} Z`;
+    const totalHeight = NAVBAR_CURVE.ribbonHeight + 200;
+    const d = `M ${points.join(' L ')} L ${w},${totalHeight} L 0,${totalHeight} Z`;
     setSvgData({ path: d, width: w });
   };
 
@@ -26,15 +25,15 @@ const CurveMask = ({ isScrolled = false, thickness = 30, color = 'white' }) => {
     updatePath();
     window.addEventListener('resize', updatePath);
     return () => window.removeEventListener('resize', updatePath);
-  }, [thickness]);
+  }, [verticalOffset, isScrolled]);
 
   if (!svgData.width) return null;
 
-  const totalHeight = NAVBAR_CURVE.ribbonHeight;
+  const totalHeight = NAVBAR_CURVE.ribbonHeight + 200;
 
   return (
     <svg
-      className="curve-mask"
+      className={`curve-mask${isScrolled ? ' curve-mask--scrolled' : ''}`}
       width="100%"
       height={totalHeight}
       viewBox={`0 0 ${svgData.width} ${totalHeight}`}

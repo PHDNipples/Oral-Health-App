@@ -5,9 +5,6 @@
   width: 100%;
 }
 
-.hero-wrapper {
-  position: relative;
-}
 
 .nav-links {
   position: fixed;
@@ -41,16 +38,16 @@
   background-color: transparent;
 }
 
-.nav-link[data-type='language'] {
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+.edge-nav-link {
+  background-color: #ffd700;
+  color: #003359;
 }
 
-.nav-link[data-type='language']:hover {
-  color: #ffd700;
-  background-color: rgba(255, 255, 255, 0.15);
+.edge-nav-link:hover {
+  background-color: transparent;
 }
+
+
 
 /* ================= Logo ================= */
 .logo-container {
@@ -98,18 +95,19 @@
 
 
 .logo-svg {
-  height: auto;
-  width: 100%;
-  max-width: 260px;
+  height: 325px;
+  width: auto;
+  max-width: none;
   transform: translateY(0px);
-  transition: transform 0.6s ease;
+  transition: all 0.6s ease;
   will-change: transform;
   backface-visibility: hidden;
 }
 
 .logo-container.scrolled .logo-svg {
-  width: 65%;
-  transform: translateY(0px);
+  height: 250px;
+  width: auto;
+  transform: translateY(0);
   pointer-events: none !important;
   z-index: 1;
 }
@@ -130,20 +128,3 @@
 .green-container { height: 120px; top: 80px; pointer-events: none !important;; z-index: 50;}
 .svg-arch { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; transition: all 0.3s ease-in-out; pointer-events: none !important;}
 .svg-arch path { transition: d 0.3s ease-in-out; pointer-events: none !important;}
-
-/* ===== Floating hover pill */
-.navbar-pill {
-  position: fixed;            /* float above everything */
-  top: 0;
-  left: 0;
-  width: 100px;               /* initial width, will adjust via JS */
-  height: 36px;               /* match nav-link height roughly */
-  background-color: #ffd700;  /* pill color */
-  border-radius: 18px;        /* half of height for pill shape */
-  pointer-events: none !important;
-  transform: translate(0, 0); /* initial position */
-  transition: all 0.3s ease;  /* smooth movement */
-  z-index: 1000;              /* above nav links but below logo */
-  opacity: 0.2;               /* subtle by default */
-  z-index: 100;
-}

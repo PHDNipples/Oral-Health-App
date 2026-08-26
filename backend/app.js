@@ -20,10 +20,11 @@ app.use(express.json());
 // ===============================
 // Database Connection
 // ===============================
-mongoose
-  .connect(
-    process.env.MONGO_URI || "mongodb://localhost:27017/oral_health_app"
-  )
+if (!process.env.MONGO_URI) {
+  throw new Error('MONGO_URI environment variable is not set');
+}
+mongoose.connect(process.env.MONGO_URI)
+
   .then(() => console.log("✅ MongoDB connected successfully!"))
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);

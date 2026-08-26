@@ -1,7 +1,9 @@
 // backend/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
-
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is not set');
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 module.exports = (req, res, next) => {
   const authHeader = req.header('Authorization');
   const token = authHeader && authHeader.startsWith('Bearer ')

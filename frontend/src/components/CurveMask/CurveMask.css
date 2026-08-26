@@ -1,12 +1,12 @@
 .curve-mask {
   position: fixed;
-  top: 900px; /* NAVBAR_VERTICAL_SHIFT — ribbon starts here */
+  top: 90px;
   left: 0;
   width: 100%;
   pointer-events: none;
-  z-index: 1001;
-  height: 250px;
-  top: 90px;
+  z-index: 56;
 }
 
-.curve-mask--scrolled { top: 0; }
+.curve-mask--scrolled {
+  top: 0;
+}

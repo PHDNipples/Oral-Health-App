@@ -9,6 +9,8 @@ export const NAVBAR_CURVE = {
   ribbonHeight: 250,
 };
 
+export const TABLOID_COMPOSITION_SCALE = 0.92;
+
 function curvePoint(t, curve = NAVBAR_CURVE) {
   const inverseT = 1 - t;
   return {

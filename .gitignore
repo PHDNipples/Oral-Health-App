@@ -13,7 +13,7 @@ yarn-debug.log*
 # Env file with secrets
 /backend/.env
 # Firebase service account key (if you ever use a JSON file)
-#/backend/config/serviceAccountKey.json
+/backend/config/serviceAccountKey.json
 /backend/dist/
 #/backend/build/
 

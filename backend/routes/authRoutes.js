@@ -5,8 +5,10 @@ const admin = require('../utils/firebase'); // firebase-admin instance
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
-const authLimiter = rateLimit({
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is not set');
+}const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,
   standardHeaders: 'draft-8',

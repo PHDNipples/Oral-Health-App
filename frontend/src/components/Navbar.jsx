@@ -4,11 +4,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import AtaataLogoImg from '../Logo/Ataata.svg';
 import TabloidHero from './TabloidHero/TabloidHero';
+import CurveMask from './CurveMask/CurveMask';
 import LogoSpinner from './LogoSpinner';
-import { gsap } from 'gsap';
 import '../index.css';
 import './Navbar.css';
-import { NAVBAR_CURVE, getCurveAngle, getCurveY } from './navbarCurve';
+import { NAVBAR_CURVE, getCurveAngle, getCurveY, TABLOID_COMPOSITION_SCALE } from './navbarCurve';
 
 const routeColors = {
   '/': '#e08fff',
@@ -22,6 +22,9 @@ const routeColors = {
 };
 
 const NAVBAR_VERTICAL_SHIFT = 90;
+const NAV_EDGE_HORIZONTAL_OFFSET = 16;
+const MASK_VERTICAL_OFFSET =-47; // higher
+const MASK_COLOR = '#f8f8f8';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,8 +33,6 @@ const Navbar = () => {
   const location = useLocation();
   const { currentUser, logout } = useAuth();
   const navRefs = useRef([]);
-  const pillRef = useRef(null);
-  const [activeEl, setActiveEl] = useState(null);
   const logoRef = useRef(null);
 
   const leftLinks = [
@@ -83,6 +84,8 @@ const Navbar = () => {
 
 // Increase this value to lower links; decrease it to raise them.
 const NAV_LINK_VERTICAL_OFFSET = 45;
+// Raises only the Language and Login/Logout links into end bumps.
+const NAV_EDGE_LINK_OFFSET = 70;
 
   // ===== Update nav link positions
   useEffect(() => {
@@ -96,47 +99,67 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
 
       // Left links
       const visibleLeft = leftLinks.filter(link => !link.auth || currentUser);
+      const lowerLeftLinks = visibleLeft.filter(link => !link.isDropdown);
       const leftRange = logoX * middleGapFactor;
+      let lowerLeftIndex = 0;
       visibleLeft.forEach((link, i) => {
         const el = navRefs.current[i];
         if (!el) return;
-        const spacing = leftRange / visibleLeft.length;
-        const x = logoX - spacing * (visibleLeft.length - i);
+        const linkWidth = el.offsetWidth || 24;
+        const x = link.isDropdown
+          ? NAV_EDGE_HORIZONTAL_OFFSET
+          : logoX - (leftRange / (lowerLeftLinks.length + 1))
+            * (lowerLeftLinks.length - lowerLeftIndex);
+        if (!link.isDropdown) lowerLeftIndex += 1;
         el.style.position = 'absolute';
         el.style.left = `${x}px`;
-        const linkWidth = el.offsetWidth || 24;
         const linkHeight = el.offsetHeight || 24;
         const linkCenterX = x + linkWidth / 2;
         const yCurve = getCurveY(linkCenterX, window.innerWidth, NAVBAR_CURVE);
         const angle = getCurveAngle(linkCenterX, window.innerWidth, NAVBAR_CURVE);
+        const verticalOffset = i === 0
+          ? NAV_LINK_VERTICAL_OFFSET - NAV_EDGE_LINK_OFFSET
+          : NAV_LINK_VERTICAL_OFFSET;
         el.style.top = `${isScrolled
           ? 60
-          : yCurve + NAVBAR_VERTICAL_SHIFT + NAV_LINK_VERTICAL_OFFSET - linkHeight / 2
+          : yCurve + NAVBAR_VERTICAL_SHIFT + verticalOffset - linkHeight / 2
         }px`;
-        el.style.transform = isScrolled ? 'rotate(0rad)' : `rotate(${angle}rad)`;
+        el.style.transform = isScrolled
+          ? 'rotate(0rad)'
+          : `rotate(${angle}rad)${i === 0 ? ` scale(${TABLOID_COMPOSITION_SCALE})` : ''}`;
         el.style.transition = 'top 0.2s ease, left 0.2s ease, transform 0.2s ease';
       });
 
       // Right links
       const visibleRight = rightLinks;
+      const lowerRightLinks = visibleRight.filter((link, i) => i !== visibleRight.length - 1);
       const rightRange = window.innerWidth - logoRightX - gap;
+      let lowerRightIndex = 0;
       visibleRight.forEach((link, i) => {
         const el = navRefs.current[visibleLeft.length + i];
         if (!el) return;
-        const spacing = rightRange / visibleRight.length;
-        const x = logoRightX + spacing * (i + 1);
+        const linkWidth = el.offsetWidth || 24;
+        const isEdgeLink = i === visibleRight.length - 1;
+        const x = isEdgeLink
+          ? window.innerWidth - NAV_EDGE_HORIZONTAL_OFFSET - linkWidth
+          : logoRightX + (rightRange / (lowerRightLinks.length + 1)) * (lowerRightIndex + 1);
+        if (!isEdgeLink) lowerRightIndex += 1;
         el.style.position = 'absolute';
         el.style.left = `${x}px`;
-        const linkWidth = el.offsetWidth || 24;
         const linkHeight = el.offsetHeight || 24;
         const linkCenterX = x + linkWidth / 2;
         const yCurve = getCurveY(linkCenterX, window.innerWidth, NAVBAR_CURVE);
         const angle = getCurveAngle(linkCenterX, window.innerWidth, NAVBAR_CURVE);
+        const verticalOffset = i === visibleRight.length - 1
+          ? NAV_LINK_VERTICAL_OFFSET - NAV_EDGE_LINK_OFFSET
+          : NAV_LINK_VERTICAL_OFFSET;
         el.style.top = `${isScrolled
           ? 60
-          : yCurve + NAVBAR_VERTICAL_SHIFT + NAV_LINK_VERTICAL_OFFSET - linkHeight / 2
+          : yCurve + NAVBAR_VERTICAL_SHIFT + verticalOffset - linkHeight / 2
         }px`;
-        el.style.transform = isScrolled ? 'rotate(0rad)' : `rotate(${angle}rad)`;
+        el.style.transform = isScrolled
+          ? 'rotate(0rad)'
+          : `rotate(${angle}rad)${i === visibleRight.length - 1 ? ` scale(${TABLOID_COMPOSITION_SCALE})` : ''}`;
         el.style.transition = 'top 0.2s ease, left 0.2s ease, transform 0.2s ease';
       });
     };
@@ -145,34 +168,6 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
     window.addEventListener('resize', updatePositions);
     return () => window.removeEventListener('resize', updatePositions);
   }, [isScrolled, currentUser, leftLinks.length, rightLinks.length]);
-
-  // ===== Pill animation for hover + active route
-  useEffect(() => {
-    const pill = pillRef.current;
-    if (!pill) return;
-
-    // Determine active link based on route
-    const allLinks = [...leftLinks.filter(link => !link.auth || currentUser), ...rightLinks];
-    const activeIndex = allLinks.findIndex(link => link.path === location.pathname);
-    const defaultActive = navRefs.current[activeIndex] || null;
-
-    const targetEl = activeEl || defaultActive;
-    if (!targetEl) {
-      pill.style.opacity = 0;
-      return;
-    }
-
-    const rect = targetEl.getBoundingClientRect();
-    const navbarRect = pill.parentElement.getBoundingClientRect();
-
-    pill.style.width = `${rect.width}px`;
-    pill.style.height = `${rect.height}px`;
-    pill.style.left = `${rect.left - navbarRect.left}px`;
-    pill.style.top = `${rect.top - navbarRect.top}px`;
-    pill.style.opacity = 1;
-    pill.style.transform = targetEl.style.transform;
-    pill.style.transition = 'all 0.2s ease';
-  }, [activeEl, location.pathname, currentUser]);
 
   return (
     <>
@@ -193,19 +188,19 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
         .green-container { height: 120px; top: ${NAVBAR_VERTICAL_SHIFT + 80}px; }
         .ribbon-container.scrolled, .green-container.scrolled { top: 0; }
 
-        .svg-arch { 
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  z-index: 1; 
-  pointer-events: none;   /* ← ADD THIS */
-  transition: all 0.3s ease-in-out; 
+        .svg-arch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
 
 .svg-arch * {
-  pointer-events: none;   /* ← ADD THIS TOO */
+  pointer-events: none;
 }
 
         .logo-container {
@@ -230,9 +225,6 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
 
         .inner-circle { width: 180px; height: 180px; border-radius: 50%; background-color: white; display: flex; justify-content: center; align-items: center; transition: all 0.4s ease-in-out; }
         .logo-container.scrolled .inner-circle { width: 160px; height: 160px; }
-        .logo-svg { height: 325px; width: auto; transform: translateY(10px); transition: all 0.6s ease; }
-        .logo-container.scrolled .logo-svg { height: 250px; transform: translateY(0); }
-
         .nav-links { position: fixed; left: 0; top: 0; width: 100%; pointer-events: auto; }
         .nav-link { text-decoration: none; color: white; cursor: pointer; white-space: nowrap; pointer-events: auto; font-size: 1.25rem; font-weight: 500; transition: color 0.2s, top 0.6s ease, left 0.6s ease, transform 0.6s ease; }
         .nav-link.active, .nav-link:hover { color: #ffd700; }
@@ -241,21 +233,10 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
         .dropdown.visible { display: block; }
         .dropdown-item { padding: 0.5rem 1rem; cursor: pointer; }
         .dropdown-item:hover { background-color: #f0f0f0; }
-
-        .navbar-pill {
-          position: absolute;
-          background-color: rgba(255, 255, 255, 0.15);
-          border-radius: 12px;
-          pointer-events: none;
-          opacity: 0;
-          z-index: 0;
-          transition: all 0.2s ease;
-        }
           
       `}</style>
 
       {/* ================= Navbar Wrapper ================= */}
-{/* ================= Navbar Wrapper ================= */}
 <div className="navbar-wrapper">
   {/* Ribbon background */}
   <div className={`ribbon-container ${isScrolled ? 'scrolled' : ''}`}>
@@ -287,8 +268,6 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
           key={i}
           style={{ position: 'relative' }}
           ref={el => (navRefs.current[i] = el)}
-          onMouseEnter={() => setActiveEl(navRefs.current[i])}
-          onMouseLeave={() => setActiveEl(null)}
         >
           <a
             onClick={() =>
@@ -296,9 +275,9 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
                 ? setLanguageDropdown(!languageDropdown)
                 : handleLinkClick(link)
             }
-            className="nav-link"
+            className={`nav-link${link.isDropdown ? ' edge-nav-link' : ''}`}
           >
-            {link.name}
+            {link.isDropdown ? '🇳🇿' : link.name}
           </a>
 
           {link.isDropdown && (
@@ -322,9 +301,7 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
         key={i}
         ref={el => (navRefs.current[leftLinks.length + i] = el)}
         onClick={() => handleLinkClick(link)}
-        onMouseEnter={() => setActiveEl(navRefs.current[leftLinks.length + i])}
-        onMouseLeave={() => setActiveEl(null)}
-        className="nav-link"
+        className={`nav-link${i === rightLinks.length - 1 ? ' edge-nav-link' : ''}`}
       >
         {link.name}
       </a>
@@ -343,34 +320,7 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
     cursor: 'pointer'
   }}
 >
-  <div className="inner-circle" style={{ position: "relative" }}>
-
-    {/* BLUE CROSSHAIR — marks the true center of the inner-circle container */}
-    {/* DELETE these two divs when done aligning */}
-    <div style={{
-      position: "absolute",
-      top: "50%",
-      left: 0,
-      width: "100%",
-      height: "2px",
-      background: "transparent",
-      opacity: 0.8,
-      pointerEvents: "none",
-      zIndex: 9999,
-      transform: "translateY(-50%)"
-    }}/>
-    <div style={{
-      position: "absolute",
-      left: "50%",
-      top: 0,
-      width: "2px",
-      height: "100%",
-      background: "transparent",
-      opacity: 0.8,
-      pointerEvents: "none",
-      zIndex: 9999,
-      transform: "translateX(-50%)"
-    }}/>
+  <div className="inner-circle">
 
     <LogoSpinner
       src={AtaataLogoImg}
@@ -381,6 +331,11 @@ const NAV_LINK_VERTICAL_OFFSET = 45;
 
 {/* ================= Hero Section Wrapper ================= */}
 <TabloidHero isScrolled={isScrolled} />
+<CurveMask
+  isScrolled={isScrolled}
+  verticalOffset={MASK_VERTICAL_OFFSET}
+  color={MASK_COLOR}
+/>
 <div className="spacer"></div>
     </>
   );

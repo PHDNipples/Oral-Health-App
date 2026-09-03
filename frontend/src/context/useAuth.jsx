@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase';
-import { loginUser as backendLogin } from '../services/authService';
+import { loginUser as backendLogin, logoutUser as backendLogout } from '../services/authService';
 
 export const AuthContext = createContext(null);
 
@@ -12,6 +12,9 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
 
   const logout = async () => {
+    if (token) {
+      await backendLogout(token);
+    }
     await signOut(auth);
     setCurrentUser(null);
     setToken(null);

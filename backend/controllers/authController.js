@@ -1,4 +1,6 @@
 // backend/controllers/authController.js
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const admin = require('../utils/firebase');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -9,25 +11,40 @@ exports.loginFirebase = async (req, res) => {
   if (!idToken) return res.status(400).json({ error: 'No ID token provided' });
 
   try {
-    // Verify Firebase ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const { uid, email } = decodedToken;
+    const { uid, email, name } = decodedToken;
 
-    // Find or create user in MongoDB
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ $or: [{ email }, { firebaseUid: uid }] });
+
     if (!user) {
-      user = new User({ email, name: 'New User', password: 'firebaseuser' });
+      const randomPassword = crypto.randomBytes(32).toString('hex');
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      user = new User({
+        name: name || 'New User',
+        email,
+        password: hashedPassword,
+        firebaseUid: uid,
+      });
+
+      await user.save();
+    } else {
+      if (!user.firebaseUid) user.firebaseUid = uid;
+      if (!user.name && name) user.name = name;
+      if (user.email !== email) user.email = email;
       await user.save();
     }
 
-    // Issue backend JWT
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
+    const token = jwt.sign({ uid, email }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
     });
 
-    res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
+    res.json({
+      token,
+      user: { id: user._id, uid, name: user.name, email: user.email },
+    });
   } catch (err) {
-    console.error(err);
+    console.error('Firebase login failed:', err);
     res.status(401).json({ error: 'Invalid Firebase ID token' });
   }
 };

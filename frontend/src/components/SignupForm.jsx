@@ -29,7 +29,7 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
       const token = await userCredential.user.getIdToken();
 
       // Call backend to create user in MongoDB
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

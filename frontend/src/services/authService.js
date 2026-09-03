@@ -1,7 +1,7 @@
 // frontend/src/services/authService.js
 
 export const loginUser = async (firebaseIdToken) => {
-  const response = await fetch('http://localhost:5000/api/auth/login-firebase', {
+  const response = await fetch('/api/auth/login-firebase', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -15,4 +15,15 @@ export const loginUser = async (firebaseIdToken) => {
   }
 
   return response.json(); // returns { token, user }
+};
+
+export const logoutUser = async (token) => {
+  const response = await fetch('/api/auth/logout', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to revoke backend session');
+  }
 };

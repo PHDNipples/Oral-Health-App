@@ -11,11 +11,19 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
+const allowedOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || origin === allowedOrigin) return callback(null, true);
+    return callback(null, false);
+  },
+};
+
 // ===============================
 // Middleware
 // ===============================
-app.use(cors());
-app.use(express.json());
+app.use(cors(corsOptions));
+app.use(express.json({ limit: "100kb" }));
 
 // ===============================
 // Database Connection

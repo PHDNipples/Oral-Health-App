@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../config/firebase";
 
-export default function SignupForm({ onSignup, onSwitchToLogin }) {
+export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -33,13 +33,8 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,  // send token for backend verification
         },
-        body: JSON.stringify({
-          uid: userCredential.user.uid,
-          email,
-          name,
-        }),
+        body: JSON.stringify({ idToken: token }),
       });
 
       if (!response.ok) {
@@ -50,7 +45,7 @@ export default function SignupForm({ onSignup, onSwitchToLogin }) {
 
       const userData = await response.json();
 
-      if (onSignup) onSignup(userData, token);
+      if (onSignupSuccess) onSignupSuccess(userData.user, userData.token);
     } catch (err) {
       setError(err.message || "Signup failed.");
     }

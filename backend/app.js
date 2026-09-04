@@ -11,10 +11,23 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-const allowedOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const configuredOrigins = process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN;
+if (process.env.NODE_ENV === "production" && !configuredOrigins) {
+  throw new Error("FRONTEND_ORIGINS must be set in production");
+}
+
+const allowedOrigins = (configuredOrigins || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+if (process.env.NODE_ENV === "production" && allowedOrigins.some((origin) => !/^https:\/\//i.test(origin))) {
+  throw new Error("Production frontend origins must use HTTPS");
+}
+
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || origin === allowedOrigin) return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
     return callback(null, false);
   },
 };

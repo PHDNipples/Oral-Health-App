@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import UserForm from './UserForm';
+import { apiUrl } from '../config/api';
 
-const API_URL = '/api/users';
+const API_URL = apiUrl('/api/users');
 
 export default function UserActions() {
   const [message, setMessage] = useState('');

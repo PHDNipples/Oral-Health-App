@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -8,15 +8,16 @@ import {
 } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import AuthPage from "./pages/AuthPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
-import MyProviders from "./pages/MyProviders";
-import FindMyTeeth from "./pages/FindMyTeeth";
-import LetsTalk from "./pages/LetsTalk";
-import SecuritySettings from "./pages/SecuritySettings";
-import Home from "./pages/Home";
-import Health from "./pages/Health";
-import Test from "./pages/Test";
+
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage.jsx"));
+const MyProviders = lazy(() => import("./pages/MyProviders"));
+const FindMyTeeth = lazy(() => import("./pages/FindMyTeeth"));
+const LetsTalk = lazy(() => import("./pages/LetsTalk"));
+const SecuritySettings = lazy(() => import("./pages/SecuritySettings"));
+const Home = lazy(() => import("./pages/Home"));
+const Health = lazy(() => import("./pages/Health"));
+const Test = lazy(() => import("./pages/Test"));
 
 import { AuthProvider, useAuth } from "./context/useAuth";
 
@@ -52,7 +53,8 @@ function App() {
       {showNavbar && <Navbar />}
 
       <div style={{ flex: 1 }}>
-        <Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/" element={<Home />} />
 
@@ -112,7 +114,8 @@ function App() {
 
           {/* 🔬 Sandbox / Playground — DEV ONLY */}
           {import.meta.env.DEV && <Route path="/test" element={<Test />} />}
-        </Routes>
+          </Routes>
+        </Suspense>
       </div>
     </div>
   );

@@ -3,13 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://PHDNipples.github.io/Oral-Health-App/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.8",
@@ -27,7 +25,6 @@
     "@types/react": "^18.2.38",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^6.0.2",
-    "gh-pages": "^6.1.1",
     "react-flip-page": "^1.6.4",
     "react-icons": "^5.5.0",
     "typescript": "^5.4.5",

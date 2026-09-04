@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import { apiUrl } from "../config/api";
 
 export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
       const token = await userCredential.user.getIdToken();
 
       // Call backend to create user in MongoDB
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch(apiUrl("/api/auth/signup"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

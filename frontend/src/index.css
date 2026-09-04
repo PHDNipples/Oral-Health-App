@@ -4,24 +4,9 @@
 /* ===== Add your custom font here ===== */
 @font-face {
   font-family: 'DiscotecaRounded';
-  src: url('../assets/fonts/DiscotecaRounded_Free_For_Personal_Use.ttf') format('truetype');
+  src: url('/assets/fonts/DiscotecaRounded_Free_For_Personal_Use.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-}
-
-/* Optional: bold/italic variants */
-@font-face {
-  font-family: 'DiscotecaRounded';
-  src: url('../assets/fonts/DiscotecaRounded_Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'DiscotecaRounded';
-  src: url('../assets/fonts/DiscotecaRounded_Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
 }
 
 /* =========================

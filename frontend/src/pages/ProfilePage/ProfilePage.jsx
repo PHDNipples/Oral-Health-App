@@ -3,6 +3,7 @@ import { useAuth } from "../../context/useAuth";
 import LeftSection from "./sections/LeftSection.jsx";
 import MiddleSection from "./sections/MiddleSection.jsx";
 import RightSection from "./sections/RightSection.jsx";
+import { apiUrl } from "../../config/api";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
@@ -16,7 +17,7 @@ const ProfilePage = () => {
 
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch("/api/users/me", {
+        const response = await fetch(apiUrl("/api/users/me"), {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!response.ok) throw new Error("Could not load profile");

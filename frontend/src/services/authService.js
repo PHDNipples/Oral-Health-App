@@ -1,7 +1,8 @@
 // frontend/src/services/authService.js
+import { apiUrl } from '../config/api';
 
 export const loginUser = async (firebaseIdToken) => {
-  const response = await fetch('/api/auth/login-firebase', {
+  const response = await fetch(apiUrl('/api/auth/login-firebase'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -18,7 +19,7 @@ export const loginUser = async (firebaseIdToken) => {
 };
 
 export const logoutUser = async (token) => {
-  const response = await fetch('/api/auth/logout', {
+  const response = await fetch(apiUrl('/api/auth/logout'), {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
   });

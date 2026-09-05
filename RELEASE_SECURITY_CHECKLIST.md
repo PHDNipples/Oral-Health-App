@@ -7,17 +7,17 @@ Complete the items in order. Each item is complete only when all of its requirem
 ## 1. Production API and frontend deployment
 
 - [x] Choose and document one production hosting path for the frontend and backend: Render Static Site at `https://oral-health-app-frontend.onrender.com` for the frontend and Render Web Service at `https://oral-health-app.onrender.com` for the backend, as recorded in `README.md` and `render.yaml`.
-- [ ] In the Render frontend service `oral-health-app-frontend`, rename the existing `VITE_API_URI` variable to `VITE_API_URL` and set its value to `https://oral-health-app.onrender.com`; leave the Google Maps variables unchanged. Save and redeploy using the current repository commit.
-- [ ] Verify the production frontend does not send API requests to `localhost`, `127.0.0.1`, or a Vite development proxy. Inspect the deployed JavaScript assets or browser Network panel after the redeploy; the old live bundle currently still contains `localhost`.
-- [ ] Verify the deployed frontend can successfully call `/api/health` and an authenticated API route from the real public origin.
-- [ ] Set `FRONTEND_ORIGINS=https://oral-health-app-frontend.onrender.com` in the Render backend service `oral-health-app`, save, and redeploy. Confirm the backend CORS allowlist contains only the exact production frontend origin or origins, with no wildcard and no development origin. The current live backend returned no CORS header because this setting is not active there yet.
+- [x] In the Render frontend service `oral-health-app-frontend`, rename the existing `VITE_API_URI` variable to `VITE_API_URL` and set its value to `https://oral-health-app.onrender.com`; leave the Google Maps variables unchanged. Save and redeploy using the current repository commit.
+- [x] Verify the production frontend does not send API requests to `localhost`, `127.0.0.1`, or a Vite development proxy. The deployed bundle uses `https://oral-health-app.onrender.com`; its one remaining `localhost` string is React Router's internal URL fallback, not an API endpoint.
+- [ ] Verify the deployed frontend can successfully call `/api/health` and an authenticated API route from the real public origin. The backend health request from the frontend origin is verified; the authenticated route still requires a real sign-in test.
+- [x] Set `FRONTEND_ORIGINS=https://oral-health-app-frontend.onrender.com` in the Render backend service `oral-health-app`, save, and redeploy. The live backend returns `Access-Control-Allow-Origin: https://oral-health-app-frontend.onrender.com` and does not grant the unapproved-origin probe.
 - [x] Verify the deployment does not expose a broken `/api` route through GitHub Pages or another static host. The Render frontend host returns its HTML application for `/api/health`, not a backend JSON response; API traffic must go to `https://oral-health-app.onrender.com`.
 - [x] Record the final frontend URL, backend URL, and deployment settings in `README.md` and `render.yaml`.
 
 ## 2. HTTPS and transport security
 
-- [ ] Serve the public backend only through HTTPS with a valid certificate.
-- [ ] Configure the hosting proxy or load balancer to redirect HTTP to HTTPS, or reject public HTTP traffic.
+- [x] Serve the public backend only through HTTPS with a valid certificate. The HTTPS health endpoint responds successfully.
+- [x] Configure the hosting proxy or load balancer to redirect HTTP to HTTPS, or reject public HTTP traffic. Render redirects the HTTP backend URL to HTTPS.
 - [ ] If TLS terminates at a reverse proxy, configure Express proxy handling correctly and verify HTTPS redirect logic cannot be bypassed through spoofed headers.
 - [ ] Verify cookies, if introduced later, use `Secure`, `HttpOnly`, and an appropriate `SameSite` policy.
 - [ ] Verify no production configuration, API URL, documentation, or browser network request uses plain HTTP except local development.
@@ -76,10 +76,10 @@ Complete the items in order. Each item is complete only when all of its requirem
 
 ## 8. Release verification
 
-- [ ] Run the complete backend test suite with `npm test` from `backend/`; all tests pass.
-- [ ] Run the frontend production check with `npm run build` from `frontend/`; TypeScript and Vite build both pass.
+- [x] Run the complete backend test suite with `npm test` from `backend/`; all 8 tests pass.
+- [x] Run the frontend production check with `npm run build` from `frontend/`; TypeScript and Vite build both pass.
 - [ ] Add and pass tests for the JWT, Firebase revocation, IDOR, production CORS, HTTPS/proxy, and MongoDB requirements above.
-- [ ] Perform a clean checkout or equivalent CI build using only documented environment variables and deployment secrets.
+- [ ] Perform a clean checkout or equivalent CI build using only documented environment variables and deployment secrets. The backend `npm ci --dry-run` passes against the current lockfile, but the full clean production checkout still needs to be documented and verified.
 - [ ] Scan Git-tracked files and Git history for `.env` files, private keys, service-account files, credentials, tokens, and accidental secret values.
 - [ ] Confirm generated `dist/` output contains no backend secrets, private keys, internal database URLs, or unintended development endpoints.
 - [ ] Review the final dependency audit and resolve or explicitly accept all high and critical vulnerabilities.

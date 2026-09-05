@@ -8,6 +8,12 @@ const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
+const {
+  ALGORITHM,
+  ISSUER,
+  AUDIENCE,
+  EXPIRES_IN,
+} = require('../config/jwtConfig');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -23,7 +29,12 @@ const authLimiter = rateLimit({
 });
 
 const buildJwt = (uid, email, tokenVersion) =>
-  jwt.sign({ uid, email, tokenVersion }, JWT_SECRET, { expiresIn: '7d' });
+  jwt.sign({ uid, email, tokenVersion }, JWT_SECRET, {
+    algorithm: ALGORITHM,
+    issuer: ISSUER,
+    audience: AUDIENCE,
+    expiresIn: EXPIRES_IN,
+  });
 
 const syncFirebaseUser = async (decoded) => {
   const { uid, email, name } = decoded;
